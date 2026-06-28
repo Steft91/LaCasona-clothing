@@ -1,0 +1,3 @@
+// Data layer — Models
+// Add data models here (e.g., ProductModel, UserModel).
+// Models should implement/extend their corresponding domain entities.
