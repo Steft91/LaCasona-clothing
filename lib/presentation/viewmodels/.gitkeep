@@ -1,0 +1,2 @@
+// Presentation layer — ViewModels
+// Add ChangeNotifier-based view models here (e.g., AuthViewModel, ProductViewModel).
