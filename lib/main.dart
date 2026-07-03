@@ -26,7 +26,11 @@ import 'presentation/viewmodels/favorites_viewmodel.dart';
 import 'presentation/viewmodels/orders_viewmodel.dart';
 import 'presentation/viewmodels/product_viewmodel.dart';
 import 'presentation/viewmodels/visual_search_viewmodel.dart';
-
+import 'package:flutter_stripe/flutter_stripe.dart'; // <--- NUEVO
+import 'presentation/viewmodels/checkout_viewmodel.dart'; // <--- NUEVO
+import 'domain/use_cases/payment_use_cases.dart'; // <--- NUEVO
+import 'data/repositories/payment_repository_impl.dart'; // <--- NUEVO
+import 'data/services/stripe_service.dart'; // <--- NUEVO
 /// La Casona — Fashion e-commerce with colonial Quito aesthetic.
 ///
 /// Entry point: loads environment variables, initialises Firebase,
@@ -41,7 +45,7 @@ void main() async {
   // Initialise Firebase
   await Firebase.initializeApp();
   await SeedDataService().seedProductsIfEmpty();
-
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
   // Lock orientation to portrait
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -52,9 +56,9 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: AppTheme.primaryWhite,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: AppTheme.deepWood,
+      systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
 
@@ -78,6 +82,22 @@ class LaCasonaApp extends StatelessWidget {
         Provider<OrderRepository>(create: (_) => OrderRepositoryImpl()),
         Provider<FavoritesRepository>(create: (_) => FavoritesRepositoryImpl()),
         Provider<VisualSearchService>(create: (_) => VisualSearchService()),
+        Provider<StripeService>(create: (_) => StripeService()),
+        Provider<PaymentRepositoryImpl>(
+          create: (context) => PaymentRepositoryImpl(
+            stripeService: context.read<StripeService>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CheckoutViewModel(
+            createPaymentIntentUseCase: CreatePaymentIntentUseCase(
+              context.read<PaymentRepositoryImpl>(),
+            ),
+            savePaymentRecordUseCase: SavePaymentRecordUseCase(
+              context.read<PaymentRepositoryImpl>(),
+            ),
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => AuthViewModel(context.read<AuthRepository>()),
         ),
@@ -110,6 +130,12 @@ class LaCasonaApp extends StatelessWidget {
         title: AppConstants.appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
+        builder: (context, child) {
+          return DecoratedBox(
+            decoration: const BoxDecoration(gradient: AppTheme.wallGradient),
+            child: child ?? const SizedBox.shrink(),
+          );
+        },
         routerConfig: AppRouter.router,
       ),
     );

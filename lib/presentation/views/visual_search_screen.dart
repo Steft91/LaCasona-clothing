@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../design_system/atoms/casona_button.dart';
+import '../design_system/molecules/casona_section_card.dart';
 import '../viewmodels/visual_search_viewmodel.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/product_card.dart';
@@ -13,31 +15,28 @@ class VisualSearchScreen extends StatelessWidget {
     final visualSearch = context.watch<VisualSearchViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Búsqueda visual')),
+      appBar: AppBar(title: const Text('Busqueda visual')),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(20),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: visualSearch.isLoading
-                    ? null
-                    : visualSearch.searchFromCamera,
-                icon: const Icon(Icons.photo_camera_outlined),
-                label: const Text('Tomar foto'),
-              ),
+            child: CasonaButton(
+              text: 'Tomar foto',
+              icon: Icons.photo_camera_outlined,
+              isLoading: visualSearch.isLoading,
+              onPressed: visualSearch.isLoading
+                  ? null
+                  : visualSearch.searchFromCamera,
             ),
           ),
           if (visualSearch.detectedCategories.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Detectado: ${visualSearch.detectedCategories.join(', ')}',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+              child: CasonaSectionCard(
+                icon: Icons.auto_awesome,
+                title: 'Detectado',
+                subtitle: visualSearch.detectedCategories.join(', '),
+                child: const SizedBox.shrink(),
               ),
             ),
           Expanded(
@@ -49,7 +48,7 @@ class VisualSearchScreen extends StatelessWidget {
                     title: 'Busca con una foto',
                     message:
                         visualSearch.error ??
-                        'La cámara detectará prendas y mostrará similares.',
+                        'La camara detectara prendas y mostrara similares.',
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.all(20),

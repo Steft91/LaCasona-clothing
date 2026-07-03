@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../presentation/views/cart_screen.dart';
 import '../../presentation/views/catalog_screen.dart';
 import '../../presentation/views/chatbot_screen.dart';
+import '../../presentation/views/checkout_screen.dart';
 import '../../presentation/views/favorites_screen.dart';
 import '../../presentation/views/home_screen.dart';
 import '../../presentation/views/login_screen.dart';
@@ -110,6 +111,11 @@ class AppRouter {
         name: productDetail,
         builder: (context, state) =>
             ProductDetailScreen(productId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: checkoutPath,
+        name: checkout,
+        builder: (context, state) => const CheckoutScreen(),
       ),
       GoRoute(
         path: ordersPath,

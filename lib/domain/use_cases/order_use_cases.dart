@@ -6,7 +6,7 @@ class CreateOrderUseCase {
 
   final OrderRepository _repository;
 
-  Future<void> call(OrderEntity order) => _repository.createOrder(order);
+  Future<String> call(OrderEntity order) => _repository.createOrder(order);
 }
 
 class GetOrdersUseCase {

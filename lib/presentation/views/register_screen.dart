@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_button.dart';
+import '../design_system/atoms/casona_text_field.dart';
+import '../design_system/molecules/casona_section_card.dart';
 import '../viewmodels/auth_viewmodel.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -39,38 +42,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nombre',
-                prefixIcon: Icon(Icons.person_outline),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email_outlined),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Contraseña',
-                prefixIcon: Icon(Icons.lock_outline),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirmar contraseña',
-                prefixIcon: Icon(Icons.lock_reset),
+            CasonaSectionCard(
+              icon: Icons.person_add_alt_1_outlined,
+              title: 'Nueva cuenta',
+              subtitle: 'Crea tu perfil para guardar pedidos y favoritos.',
+              child: Column(
+                children: [
+                  CasonaTextField(
+                    controller: _nameController,
+                    labelText: 'Nombre',
+                    prefixIcon: Icons.person_outline,
+                  ),
+                  const SizedBox(height: 16),
+                  CasonaTextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    labelText: 'Email',
+                    prefixIcon: Icons.email_outlined,
+                  ),
+                  const SizedBox(height: 16),
+                  CasonaTextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    labelText: 'Contrasena',
+                    prefixIcon: Icons.lock_outline,
+                  ),
+                  const SizedBox(height: 16),
+                  CasonaTextField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    labelText: 'Confirmar contrasena',
+                    prefixIcon: Icons.lock_reset,
+                  ),
+                ],
               ),
             ),
             if (auth.error != null) ...[
@@ -81,19 +85,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
             const SizedBox(height: 24),
-            ElevatedButton(
+            CasonaButton(
+              text: 'Registrarme',
+              icon: Icons.how_to_reg,
+              isLoading: auth.isLoading,
               onPressed: auth.isLoading ? null : _register,
-              child: auth.isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Registrarme'),
             ),
-            TextButton(
+            CasonaButton(
+              text: 'Ya tengo cuenta',
+              variant: CasonaButtonVariant.ghost,
               onPressed: () => context.goNamed(AppRouter.login),
-              child: const Text('Ya tengo cuenta'),
             ),
           ],
         ),

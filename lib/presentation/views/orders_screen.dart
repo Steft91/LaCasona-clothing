@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/theme/app_theme.dart';
 import '../../core/utils/app_utils.dart';
+import '../design_system/atoms/status_chip.dart';
+import '../design_system/organisms/casona_list_tile.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/orders_viewmodel.dart';
 import '../widgets/empty_state.dart';
@@ -35,7 +36,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           : orders.orders.isEmpty
           ? const EmptyState(
               icon: Icons.receipt_long_outlined,
-              title: 'Aún no tienes pedidos',
+              title: 'Aun no tienes pedidos',
             )
           : ListView.separated(
               padding: const EdgeInsets.all(20),
@@ -43,36 +44,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final order = orders.orders[index];
-                return ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  title: Text(
-                    'Pedido ${order.id.isEmpty ? index + 1 : order.id}',
-                  ),
-                  subtitle: Text(
-                    '${order.items.length} prendas · ${AppUtils.formatDate(order.fechaCreacion)}\n${AppUtils.formatCurrency(order.total)}',
-                  ),
-                  isThreeLine: true,
-                  trailing: Chip(
-                    label: Text(order.estado),
-                    backgroundColor: _statusColor(
-                      order.estado,
-                    ).withValues(alpha: 0.16),
-                  ),
+                return CasonaListTile(
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: 'Pedido ${order.id.isEmpty ? index + 1 : order.id}',
+                  subtitle:
+                      '${order.items.length} prendas - ${AppUtils.formatDate(order.fechaCreacion)}\n${AppUtils.formatCurrency(order.total)}',
+                  trailing: StatusChip(status: order.estado),
                 );
               },
             ),
     );
-  }
-
-  Color _statusColor(String status) {
-    return switch (status) {
-      'confirmado' => AppTheme.accentGold,
-      'enviado' => Colors.blue,
-      'entregado' => AppTheme.successColor,
-      _ => AppTheme.accentBeige,
-    };
   }
 }

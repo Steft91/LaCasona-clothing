@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_text_field.dart';
 import '../viewmodels/chatbot_viewmodel.dart';
 
 class ChatbotScreen extends StatefulWidget {
@@ -59,11 +60,32 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: message.isUser
-                          ? AppTheme.accentBeige
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                          ? AppTheme.carvedWood
+                          : AppTheme.ivoryWall,
+                      borderRadius: BorderRadius.only(
+                        topLeft: const Radius.circular(16),
+                        topRight: const Radius.circular(16),
+                        bottomLeft: Radius.circular(message.isUser ? 16 : 4),
+                        bottomRight: Radius.circular(message.isUser ? 4 : 16),
+                      ),
+                      border: Border.all(color: AppTheme.dividerColor),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppTheme.warmShadow,
+                          offset: Offset(0, 6),
+                          blurRadius: 14,
+                        ),
+                      ],
                     ),
-                    child: Text(message.text),
+                    child: Text(
+                      message.text,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: message.isUser
+                                ? AppTheme.lightText
+                                : AppTheme.inkBrown,
+                            fontWeight: FontWeight.w800,
+                          ),
+                    ),
                   ),
                 );
               },
@@ -76,17 +98,19 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
+                    child: CasonaTextField(
                       controller: _controller,
                       minLines: 1,
                       maxLines: 4,
-                      decoration: const InputDecoration(
-                        hintText: 'Pregunta por outfits o prendas',
-                      ),
+                      hintText: 'Pregunta por outfits o prendas',
                     ),
                   ),
                   const SizedBox(width: 8),
                   IconButton.filled(
+                    style: IconButton.styleFrom(
+                      backgroundColor: AppTheme.carvedWood,
+                      foregroundColor: AppTheme.ivoryWall,
+                    ),
                     onPressed: chatbot.isLoading ? null : _send,
                     icon: const Icon(Icons.send),
                   ),

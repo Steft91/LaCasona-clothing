@@ -15,7 +15,7 @@ class OrderRepositoryImpl implements OrderRepository {
       _firestore.collection(AppConstants.ordersCollection);
 
   @override
-  Future<void> createOrder(OrderEntity order) {
+  Future<String> createOrder(OrderEntity order) async {
     final model = OrderModel(
       id: order.id,
       usuarioId: order.usuarioId,
@@ -25,7 +25,8 @@ class OrderRepositoryImpl implements OrderRepository {
       fechaCreacion: order.fechaCreacion,
       direccionEntrega: order.direccionEntrega,
     );
-    return _orders.add(model.toFirestore());
+    final docRef = await _orders.add(model.toFirestore());
+    return docRef.id;
   }
 
   @override

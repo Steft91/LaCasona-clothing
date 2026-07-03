@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_button.dart';
+import '../design_system/atoms/casona_text_field.dart';
+import '../design_system/molecules/casona_section_card.dart';
 import '../viewmodels/auth_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,7 +47,25 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 48),
+              const SizedBox(height: 42),
+              Center(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppTheme.softGold.withValues(alpha: 0.28),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppTheme.lineGold),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Icon(
+                      Icons.storefront_rounded,
+                      size: 42,
+                      color: AppTheme.carvedWood,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
               Text(
                 AppConstants.appName,
                 textAlign: TextAlign.center,
@@ -54,26 +75,28 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 AppConstants.appTagline,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.darkText.withValues(alpha: 0.65),
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 48),
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Contraseña',
-                  prefixIcon: Icon(Icons.lock_outline),
+              const SizedBox(height: 34),
+              CasonaSectionCard(
+                title: 'Bienvenida',
+                subtitle: 'Ingresa para continuar tu compra.',
+                child: Column(
+                  children: [
+                    CasonaTextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      labelText: 'Email',
+                      prefixIcon: Icons.email_outlined,
+                    ),
+                    const SizedBox(height: 16),
+                    CasonaTextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      labelText: 'Contrasena',
+                      prefixIcon: Icons.lock_outline,
+                    ),
+                  ],
                 ),
               ),
               if (auth.error != null) ...[
@@ -84,40 +107,34 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
               const SizedBox(height: 24),
-              ElevatedButton(
+              CasonaButton(
+                text: 'Iniciar sesion',
+                icon: Icons.login,
+                isLoading: auth.isLoading,
                 onPressed: auth.isLoading ? null : _login,
-                child: auth.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('Iniciar sesión'),
               ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
+              CasonaButton(
+                text: auth.isBiometricEnabled
+                    ? 'Entrar con biometria'
+                    : 'Biometria no configurada',
+                icon: Icons.fingerprint,
+                variant: CasonaButtonVariant.secondary,
                 onPressed: auth.isLoading ? null : _biometricLogin,
-                icon: const Icon(Icons.fingerprint),
-                label: Text(
-                  auth.isBiometricEnabled
-                      ? 'Entrar con biometría'
-                      : 'Biometría no configurada',
-                ),
               ),
               if (!auth.isBiometricEnabled) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Actívala desde Perfil después de iniciar sesión.',
+                  'Activala desde Perfil despues de iniciar sesion.',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.darkText.withValues(alpha: 0.58),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
               const SizedBox(height: 16),
-              TextButton(
+              CasonaButton(
+                text: 'Crear cuenta',
+                variant: CasonaButtonVariant.ghost,
                 onPressed: () => context.goNamed(AppRouter.register),
-                child: const Text('Crear cuenta'),
               ),
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_text_field.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/favorites_viewmodel.dart';
 import '../viewmodels/product_viewmodel.dart';
@@ -46,17 +47,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-            child: TextField(
+            child: CasonaTextField(
               controller: _searchController,
               onChanged: products.search,
-              decoration: InputDecoration(
-                hintText: 'Buscar por nombre',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.photo_camera_outlined),
-                  onPressed: () => context.pushNamed(AppRouter.visualSearch),
-                ),
-              ),
+              hintText: 'Buscar por nombre',
+              prefixIcon: Icons.search,
+              suffixIcon: Icons.photo_camera_outlined,
+              onSuffixTap: () => context.pushNamed(AppRouter.visualSearch),
             ),
           ),
           SizedBox(
@@ -70,9 +67,21 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 final category = products.categories[index];
                 final selected = category == products.selectedCategory;
                 return ChoiceChip(
-                  label: Text(category),
+                  label: Text(
+                    category,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: AppTheme.deepWood,
+                          fontWeight: FontWeight.w900,
+                        ),
+                  ),
                   selected: selected,
-                  selectedColor: AppTheme.accentBeige,
+                  selectedColor: AppTheme.softGold,
+                  backgroundColor: AppTheme.warmStone,
+                  side: BorderSide(
+                    color: selected
+                        ? AppTheme.antiqueGold
+                        : AppTheme.dividerColor,
+                  ),
                   onSelected: (_) => products.filterByCategory(category),
                 );
               },
@@ -86,7 +95,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 ? const EmptyState(
                     icon: Icons.search_off,
                     title: 'Sin resultados',
-                    message: 'Prueba otra búsqueda o categoría.',
+                    message: 'Prueba otra busqueda o categoria.',
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.all(20),

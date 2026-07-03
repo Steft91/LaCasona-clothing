@@ -37,8 +37,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           : favorites.favorites.isEmpty
           ? const EmptyState(
               icon: Icons.favorite_border,
-              title: 'No hay favoritos todavía',
-              message: 'Guarda prendas que quieras mirar después.',
+              title: 'No hay favoritos todavia',
+              message: 'Guarda prendas que quieras mirar despues.',
             )
           : GridView.builder(
               padding: const EdgeInsets.all(20),

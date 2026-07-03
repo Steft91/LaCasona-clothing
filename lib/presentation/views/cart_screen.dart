@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/app_utils.dart';
+import '../design_system/atoms/casona_button.dart';
+import '../design_system/organisms/casona_list_tile.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/cart_viewmodel.dart';
-import '../viewmodels/orders_viewmodel.dart';
 import '../widgets/empty_state.dart';
 
 class CartScreen extends StatefulWidget {
@@ -38,8 +41,8 @@ class _CartScreenState extends State<CartScreen> {
           : cart.items.isEmpty
           ? const EmptyState(
               icon: Icons.shopping_bag_outlined,
-              title: 'Tu carrito está vacío',
-              message: 'Agrega prendas desde el catálogo.',
+              title: 'Tu carrito esta vacio',
+              message: 'Agrega prendas desde el catalogo.',
             )
           : ListView.separated(
               padding: const EdgeInsets.all(20),
@@ -47,31 +50,28 @@ class _CartScreenState extends State<CartScreen> {
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final item = cart.items[index];
-                return ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                return CasonaListTile(
                   leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     child: Image.network(
                       item.imagenUrl,
-                      width: 58,
-                      height: 58,
+                      width: 48,
+                      height: 48,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image_not_supported_outlined),
+                          const Icon(
+                        Icons.image_not_supported_outlined,
+                        color: AppTheme.carvedWood,
+                      ),
                     ),
                   ),
-                  title: Text(item.nombre),
-                  subtitle: Text(
-                    '${item.talla} · ${item.color}\n${AppUtils.formatCurrency(item.subtotal)}',
-                  ),
-                  isThreeLine: true,
+                  title: item.nombre,
+                  subtitle:
+                      '${item.talla} - ${item.color}\n${AppUtils.formatCurrency(item.subtotal)}',
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
+                      IconButton.filledTonal(
                         onPressed: userId == null
                             ? null
                             : () => cart.updateQuantity(
@@ -80,9 +80,38 @@ class _CartScreenState extends State<CartScreen> {
                                 item.cantidad - 1,
                               ),
                         icon: const Icon(Icons.remove_circle_outline),
+                        iconSize: 18,
+                        constraints: const BoxConstraints.tightFor(
+                          width: 34,
+                          height: 34,
+                        ),
+                        padding: EdgeInsets.zero,
+                        style: IconButton.styleFrom(
+                          backgroundColor: AppTheme.colonialCream,
+                          foregroundColor: AppTheme.mahogany,
+                        ),
                       ),
-                      Text('${item.cantidad}'),
-                      IconButton(
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: AppTheme.softGold.withValues(alpha: 0.28),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppTheme.lineGold),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 5,
+                          ),
+                          child: Text(
+                            '${item.cantidad}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: AppTheme.deepWood),
+                          ),
+                        ),
+                      ),
+                      IconButton.filledTonal(
                         onPressed: userId == null
                             ? null
                             : () => cart.updateQuantity(
@@ -91,6 +120,16 @@ class _CartScreenState extends State<CartScreen> {
                                 item.cantidad + 1,
                               ),
                         icon: const Icon(Icons.add_circle_outline),
+                        iconSize: 18,
+                        constraints: const BoxConstraints.tightFor(
+                          width: 34,
+                          height: 34,
+                        ),
+                        padding: EdgeInsets.zero,
+                        style: IconButton.styleFrom(
+                          backgroundColor: AppTheme.colonialCream,
+                          foregroundColor: AppTheme.mahogany,
+                        ),
                       ),
                     ],
                   ),
@@ -100,85 +139,84 @@ class _CartScreenState extends State<CartScreen> {
       bottomNavigationBar: cart.items.isEmpty
           ? null
           : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        AppUtils.formatCurrency(cart.total),
-                        style: Theme.of(context).textTheme.titleLarge,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: SizedBox(
+                height: 72,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.woodGradient,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppTheme.lineGold, width: 1.2),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppTheme.warmShadow,
+                        offset: Offset(0, 5),
+                        blurRadius: 11,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 4, 4, 7),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.parchmentGradient,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppTheme.burnishedGold),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: AppTheme.carvedWood,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                  ),
+                                  Text(
+                                    AppUtils.formatCurrency(cart.total),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          color: AppTheme.inkBrown,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            CasonaButton(
+                              text: 'Confirmar',
+                              icon: Icons.shopping_bag_outlined,
+                              fullWidth: false,
+                              compact: true,
+                              onPressed: userId == null
+                                  ? null
+                                  : () => context.pushNamed(AppRouter.checkout),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: userId == null ? null : () => _confirm(userId),
-                      child: const Text('Confirmar pedido'),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-    );
-  }
-
-  Future<void> _confirm(String userId) async {
-    var typedAddress = '';
-    final address = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Dirección de entrega'),
-        content: TextField(
-          onChanged: (value) {
-            typedAddress = value;
-          },
-          decoration: const InputDecoration(
-            hintText: 'Ej. Centro histórico, Quito',
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, typedAddress),
-            child: const Text('Confirmar'),
-          ),
-        ],
-      ),
     );
-
-    if (address == null || address.trim().isEmpty || !mounted) return;
-
-    final success = await context.read<OrdersViewModel>().confirmOrder(
-      userId: userId,
-      direccionEntrega: address,
-    );
-    if (!mounted) return;
-    if (success) {
-      await context.read<CartViewModel>().loadCart(userId);
-      if (!mounted) return;
-      await showDialog<void>(
-        context: context,
-        builder: (context) => AlertDialog(
-          icon: const Icon(Icons.check_circle, color: AppTheme.successColor),
-          title: const Text('Pedido confirmado'),
-          content: const Text('Tu pedido quedó registrado como pendiente.'),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Listo'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      final message =
-          context.read<OrdersViewModel>().error ??
-          'No se pudo crear el pedido.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    }
   }
 }

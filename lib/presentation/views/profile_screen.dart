@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_button.dart';
+import '../design_system/organisms/casona_list_tile.dart';
 import '../viewmodels/auth_viewmodel.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -21,8 +23,12 @@ class ProfileScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 42,
-            backgroundColor: AppTheme.accentBeige.withValues(alpha: 0.2),
-            child: const Icon(Icons.person, size: 42, color: AppTheme.darkText),
+            backgroundColor: AppTheme.softGold.withValues(alpha: 0.35),
+            child: const Icon(
+              Icons.person,
+              size: 42,
+              color: AppTheme.carvedWood,
+            ),
           ),
           const SizedBox(height: 18),
           Center(
@@ -34,47 +40,49 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 6),
           Center(child: Text(user?.email ?? '')),
           const SizedBox(height: 24),
-          ListTile(
-            tileColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+          CasonaListTile(
             leading: const Icon(Icons.straighten),
-            title: const Text('Talla'),
-            subtitle: Text(
-              user?.talla.isNotEmpty == true ? user!.talla : 'No configurada',
-            ),
+            title: 'Talla',
+            subtitle:
+                user?.talla.isNotEmpty == true ? user!.talla : 'No configurada',
           ),
           const SizedBox(height: 12),
-          ListTile(
-            tileColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+          CasonaListTile(
             leading: const Icon(Icons.receipt_long_outlined),
-            title: const Text('Historial de pedidos'),
+            title: 'Historial de pedidos',
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(AppRouter.orders),
           ),
           const SizedBox(height: 12),
-          SwitchListTile(
-            tileColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppTheme.ivoryWall,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppTheme.dividerColor),
+              boxShadow: const [
+                BoxShadow(
+                  color: AppTheme.warmShadow,
+                  offset: Offset(0, 8),
+                  blurRadius: 18,
+                ),
+              ],
             ),
-            secondary: const Icon(Icons.fingerprint),
-            title: const Text('Acceso biométrico'),
-            subtitle: Text(auth.biometricSummary),
-            value: auth.isBiometricEnabled,
-            onChanged: auth.isLoading
-                ? null
-                : (enabled) {
-                    if (enabled) {
-                      _showEnableBiometricDialog(context);
-                    } else {
-                      context.read<AuthViewModel>().disableBiometricLogin();
-                    }
-                  },
+            child: SwitchListTile(
+              secondary: const Icon(Icons.fingerprint),
+              title: const Text('Acceso biometrico'),
+              subtitle: Text(auth.biometricSummary),
+              value: auth.isBiometricEnabled,
+              activeColor: AppTheme.carvedWood,
+              onChanged: auth.isLoading
+                  ? null
+                  : (enabled) {
+                      if (enabled) {
+                        _showEnableBiometricDialog(context);
+                      } else {
+                        context.read<AuthViewModel>().disableBiometricLogin();
+                      }
+                    },
+            ),
           ),
           if (auth.error != null) ...[
             const SizedBox(height: 12),
@@ -84,13 +92,14 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 24),
-          OutlinedButton.icon(
+          CasonaButton(
+            text: 'Cerrar sesion',
+            icon: Icons.logout,
+            variant: CasonaButtonVariant.secondary,
             onPressed: () async {
               await context.read<AuthViewModel>().logout();
               if (context.mounted) context.goNamed(AppRouter.login);
             },
-            icon: const Icon(Icons.logout),
-            label: const Text('Cerrar sesión'),
           ),
         ],
       ),
@@ -107,7 +116,7 @@ class ProfileScreen extends StatelessWidget {
     if (auth.availableBiometricMethods.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No hay huella o rostro configurado en este teléfono.'),
+          content: Text('No hay huella o rostro configurado en este telefono.'),
         ),
       );
       return;
@@ -119,7 +128,7 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Activar biometría'),
+          title: const Text('Activar biometria'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -129,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                 obscureText: true,
                 decoration: const InputDecoration(
-                  labelText: 'Confirma tu contraseña',
+                  labelText: 'Confirma tu contrasena',
                   prefixIcon: Icon(Icons.lock_outline),
                 ),
               ),
@@ -137,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Elige cómo quieres entrar',
+                  'Elige como quieres entrar',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -166,7 +175,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'El teléfono mostrará el método permitido por el sistema al validar.',
+                'El telefono mostrara el metodo permitido por el sistema al validar.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppTheme.darkText.withValues(alpha: 0.62),
                 ),
@@ -204,7 +213,7 @@ class ProfileScreen extends StatelessWidget {
 
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Acceso biométrico activado')));
+    ).showSnackBar(const SnackBar(content: Text('Acceso biometrico activado')));
   }
 }
 

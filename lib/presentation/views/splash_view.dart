@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/theme/app_theme.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/routes/app_router.dart';
+import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_button.dart';
 
-/// Pantalla temporal de bienvenida para verificar que el proyecto
-/// compila correctamente y el tema colonial se aplica.
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
@@ -28,66 +26,67 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Icono decorativo
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: AppTheme.accentBeige.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppTheme.accentBeige, width: 2),
-              ),
-              child: const Icon(
-                Icons.storefront_rounded,
-                size: 48,
-                color: AppTheme.accentBeige,
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Título
-            Text(
-              AppConstants.appName,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            const SizedBox(height: 8),
-
-            // Subtítulo
-            Text(
-              AppConstants.appTagline,
-              style: GoogleFonts.lato(
-                fontSize: 16,
-                color: AppTheme.darkText.withValues(alpha: 0.6),
-                letterSpacing: 1.5,
-              ),
-            ),
-            const SizedBox(height: 48),
-
-            // Botón de prueba
-            ElevatedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('✅ ¡Todo funciona correctamente!'),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 104,
+                  height: 104,
+                  decoration: BoxDecoration(
+                    color: AppTheme.softGold.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppTheme.lineGold, width: 1.4),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppTheme.warmShadow,
+                        offset: Offset(0, 8),
+                        blurRadius: 18,
+                      ),
+                    ],
                   ),
-                );
-              },
-              icon: const Icon(Icons.check_circle_outline),
-              label: const Text('Probar tema'),
-            ),
-            const SizedBox(height: 16),
-
-            // Info del proyecto
-            Text(
-              'Firebase · Provider · go_router',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.darkText.withValues(alpha: 0.4),
+                  child: const Icon(
+                    Icons.storefront_rounded,
+                    size: 48,
+                    color: AppTheme.carvedWood,
+                  ),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 32),
+              Text(
+                AppConstants.appName,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                AppConstants.appTagline,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 48),
+              CasonaButton(
+                text: 'Probar tema',
+                icon: Icons.check_circle_outline,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Todo funciona correctamente'),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Firebase - Provider - go_router',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
         ),
       ),
     );

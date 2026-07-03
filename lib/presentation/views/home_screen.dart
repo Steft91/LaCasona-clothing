@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../design_system/atoms/casona_text_field.dart';
+import '../design_system/molecules/casona_section_card.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/favorites_viewmodel.dart';
 import '../viewmodels/product_viewmodel.dart';
@@ -19,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
         context.read<FavoritesViewModel>().loadFavorites(user.id);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,27 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Text(
-              'Hola, ${auth.user?.nombre ?? 'bienvenida'}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Encuentra piezas con alma quiteña.',
-              style: Theme.of(context).textTheme.bodyMedium,
+            CasonaSectionCard(
+              icon: Icons.storefront_outlined,
+              title: 'Hola, ${auth.user?.nombre ?? 'bienvenida'}',
+              subtitle: 'Encuentra piezas con alma quitena.',
+              child: const SizedBox.shrink(),
             ),
             const SizedBox(height: 20),
-            TextField(
+            CasonaTextField(
+              controller: _searchController,
               readOnly: true,
               onTap: () => context.goNamed(AppRouter.search),
-              decoration: InputDecoration(
-                hintText: 'Buscar prendas',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.photo_camera_outlined),
-                  onPressed: () => context.pushNamed(AppRouter.visualSearch),
-                ),
-              ),
+              hintText: 'Buscar prendas',
+              prefixIcon: Icons.search,
+              suffixIcon: Icons.photo_camera_outlined,
+              onSuffixTap: () => context.pushNamed(AppRouter.visualSearch),
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -77,16 +81,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final category = AppConstants.categories[index];
                   return ActionChip(
-                    label: Text(category),
+                    label: Text(
+                      category,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: AppTheme.deepWood,
+                            fontWeight: FontWeight.w900,
+                          ),
+                    ),
                     onPressed: () {
                       context.read<ProductViewModel>().filterByCategory(
                         category,
                       );
                       context.goNamed(AppRouter.search);
                     },
-                    backgroundColor: AppTheme.accentBeige.withValues(
-                      alpha: 0.16,
-                    ),
+                    backgroundColor: AppTheme.softGold,
+                    side: const BorderSide(color: AppTheme.burnishedGold),
                   );
                 },
               ),
@@ -109,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 220,
                 child: EmptyState(
                   icon: Icons.storefront_outlined,
-                  title: 'Aún no hay productos destacados',
+                  title: 'Aun no hay productos destacados',
                 ),
               )
             else
