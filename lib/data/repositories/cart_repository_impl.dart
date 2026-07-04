@@ -47,9 +47,18 @@ class CartRepositoryImpl implements CartRepository {
     final ref = _cart.doc(userId).collection('items').doc(item.productoId);
     final current = await ref.get();
     final currentQuantity = current.data()?['cantidad'] ?? 0;
+    final stock = await _getProductStock(item.productoId);
+    final nextQuantity = currentQuantity + item.cantidad;
+
+    if (stock <= 0) {
+      throw Exception('${item.nombre} no tiene stock disponible.');
+    }
+    if (nextQuantity > stock) {
+      throw Exception('Solo quedan $stock unidad(es) de ${item.nombre}.');
+    }
 
     await ref.set({
-      'cantidad': currentQuantity + item.cantidad,
+      'cantidad': nextQuantity,
       'talla': item.talla,
       'color': item.color,
     });
@@ -61,8 +70,21 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
-  Future<void> updateQuantity(String userId, String productoId, int cantidad) {
+  Future<void> updateQuantity(
+    String userId,
+    String productoId,
+    int cantidad,
+  ) async {
     if (cantidad <= 0) return removeFromCart(userId, productoId);
+    final productDoc = await _products.doc(productoId).get();
+    final product = productDoc.data();
+    final stock = _stockFromData(product);
+    final name = product?['nombre'] ?? 'este producto';
+
+    if (cantidad > stock) {
+      throw Exception('Solo quedan $stock unidad(es) de $name.');
+    }
+
     return _cart.doc(userId).collection('items').doc(productoId).update({
       'cantidad': cantidad,
     });
@@ -76,5 +98,18 @@ class CartRepositoryImpl implements CartRepository {
       batch.delete(doc.reference);
     }
     await batch.commit();
+  }
+
+  Future<int> _getProductStock(String productId) async {
+    final productDoc = await _products.doc(productId).get();
+    return _stockFromData(productDoc.data());
+  }
+
+  int _stockFromData(Map<String, dynamic>? data) {
+    if (data == null) return 0;
+    final stock = data['stock'];
+    if (stock is int) return stock;
+    if (stock is num) return stock.toInt();
+    return 0;
   }
 }

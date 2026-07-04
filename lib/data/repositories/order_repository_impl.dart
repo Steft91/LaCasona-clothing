@@ -14,8 +14,12 @@ class OrderRepositoryImpl implements OrderRepository {
   CollectionReference<Map<String, dynamic>> get _orders =>
       _firestore.collection(AppConstants.ordersCollection);
 
+  CollectionReference<Map<String, dynamic>> get _products =>
+      _firestore.collection(AppConstants.productsCollection);
+
   @override
   Future<String> createOrder(OrderEntity order) async {
+    final docRef = _orders.doc();
     final model = OrderModel(
       id: order.id,
       usuarioId: order.usuarioId,
@@ -25,7 +29,37 @@ class OrderRepositoryImpl implements OrderRepository {
       fechaCreacion: order.fechaCreacion,
       direccionEntrega: order.direccionEntrega,
     );
-    final docRef = await _orders.add(model.toFirestore());
+
+    await _firestore.runTransaction((transaction) async {
+      final stockByProductId = <String, int>{};
+
+      for (final item in order.items) {
+        final productRef = _products.doc(item.productoId);
+        final productSnapshot = await transaction.get(productRef);
+        final productData = productSnapshot.data();
+        final stock = _stockFromData(productData);
+
+        if (!productSnapshot.exists || productData == null) {
+          throw Exception('${item.nombre} ya no está disponible.');
+        }
+        if (stock < item.cantidad) {
+          throw Exception(
+            'Stock insuficiente para ${item.nombre}. Solo quedan $stock unidad(es).',
+          );
+        }
+
+        stockByProductId[item.productoId] = stock;
+      }
+
+      for (final item in order.items) {
+        final productRef = _products.doc(item.productoId);
+        final currentStock = stockByProductId[item.productoId]!;
+        transaction.update(productRef, {'stock': currentStock - item.cantidad});
+      }
+
+      transaction.set(docRef, model.toFirestore());
+    });
+
     return docRef.id;
   }
 
@@ -35,5 +69,13 @@ class OrderRepositoryImpl implements OrderRepository {
     final orders = snapshot.docs.map(OrderModel.fromFirestore).toList()
       ..sort((a, b) => b.fechaCreacion.compareTo(a.fechaCreacion));
     return orders;
+  }
+
+  int _stockFromData(Map<String, dynamic>? data) {
+    if (data == null) return 0;
+    final stock = data['stock'];
+    if (stock is int) return stock;
+    if (stock is num) return stock.toInt();
+    return 0;
   }
 }

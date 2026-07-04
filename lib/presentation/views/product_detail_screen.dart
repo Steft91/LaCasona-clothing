@@ -98,6 +98,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    CasonaSectionCard(
+                      icon: product.stock <= 0
+                          ? Icons.inventory_2_outlined
+                          : Icons.inventory_outlined,
+                      title: product.stock <= 0
+                          ? 'Producto agotado'
+                          : 'Solo quedan ${product.stock} unidad(es)',
+                      subtitle: product.stock <= 0
+                          ? 'Este producto no se puede agregar al carrito.'
+                          : 'La compra descontará el stock disponible.',
+                      child: const SizedBox.shrink(),
+                    ),
                     const SizedBox(height: 20),
                     _Selector(
                       title: 'Color',
@@ -122,7 +135,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ? 'Sin stock'
                           : 'Agregar al carrito',
                       icon: Icons.shopping_bag_outlined,
-                      onPressed: product.stock <= 0 ? null : () => _add(product),
+                      onPressed: product.stock <= 0
+                          ? null
+                          : () => _add(product),
                     ),
                   ],
                 ),
@@ -138,13 +153,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final user = context.read<AuthViewModel>().user;
     if (user == null) return;
 
-    await context.read<CartViewModel>().addProduct(
+    final cart = context.read<CartViewModel>();
+    await cart.addProduct(
       userId: user.id,
       product: product,
       talla: _selectedSize ?? '',
       color: _selectedColor ?? '',
     );
     if (!mounted) return;
+    if (cart.error != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(cart.error!)));
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Producto agregado al carrito')),
     );
@@ -179,9 +201,9 @@ class _Selector extends StatelessWidget {
                 label: Text(
                   value,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: AppTheme.deepWood,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    color: AppTheme.deepWood,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 selected: value == selected,
                 selectedColor: AppTheme.softGold,

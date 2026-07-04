@@ -84,6 +84,10 @@ class OrdersViewModel extends ChangeNotifier {
     if (message.contains('permission-denied')) {
       return 'No tienes permiso para realizar esta acción.';
     }
+    if (message.contains('Stock insuficiente') ||
+        message.contains('no está disponible')) {
+      return message.replaceFirst('Exception: ', '');
+    }
     return 'No se pudo completar la operación. Intenta de nuevo.';
   }
 }

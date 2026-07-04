@@ -63,14 +63,14 @@ class ProductCard extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                              decoration: const BoxDecoration(
-                                gradient: AppTheme.parchmentGradient,
-                              ),
-                              child: const Icon(
-                                Icons.image_not_supported_outlined,
-                                color: AppTheme.carvedWood,
-                              ),
-                            ),
+                                  decoration: const BoxDecoration(
+                                    gradient: AppTheme.parchmentGradient,
+                                  ),
+                                  child: const Icon(
+                                    Icons.image_not_supported_outlined,
+                                    color: AppTheme.carvedWood,
+                                  ),
+                                ),
                           ),
                           Positioned.fill(
                             child: DecoratedBox(
@@ -102,9 +102,7 @@ class ProductCard extends StatelessWidget {
                                         )
                                       : AppTheme.goldGradient,
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: AppTheme.softGold,
-                                  ),
+                                  border: Border.all(color: AppTheme.softGold),
                                   boxShadow: const [
                                     BoxShadow(
                                       color: AppTheme.warmShadow,
@@ -138,11 +136,11 @@ class ProductCard extends StatelessWidget {
                             product.nombre,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppTheme.inkBrown,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: AppTheme.inkBrown,
+                                  fontWeight: FontWeight.w900,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           DecoratedBox(
@@ -158,15 +156,28 @@ class ProductCard extends StatelessWidget {
                               ),
                               child: Text(
                                 AppUtils.formatCurrency(product.precio),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
+                                style: Theme.of(context).textTheme.labelMedium
                                     ?.copyWith(
                                       color: AppTheme.deepWood,
                                       fontWeight: FontWeight.w900,
                                     ),
                               ),
                             ),
+                          ),
+                          const SizedBox(height: 7),
+                          Text(
+                            product.stock <= 0
+                                ? 'Sin stock'
+                                : 'Solo quedan ${product.stock}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: product.stock <= 0
+                                      ? AppTheme.errorColor
+                                      : AppTheme.mutedText,
+                                  fontWeight: FontWeight.w800,
+                                ),
                           ),
                         ],
                       ),

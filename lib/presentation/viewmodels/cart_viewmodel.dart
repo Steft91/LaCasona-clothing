@@ -72,7 +72,7 @@ class CartViewModel extends ChangeNotifier {
     try {
       await action();
     } catch (exception) {
-      error = exception.toString();
+      error = exception.toString().replaceFirst('Exception: ', '');
     } finally {
       isLoading = false;
       notifyListeners();
