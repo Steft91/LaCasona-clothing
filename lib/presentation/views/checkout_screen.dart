@@ -13,6 +13,7 @@ import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/cart_viewmodel.dart';
 import '../viewmodels/checkout_viewmodel.dart';
 import '../viewmodels/orders_viewmodel.dart';
+import '../viewmodels/purchase_viewmodel.dart';
 import '../widgets/login_required.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -103,7 +104,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       isLoading: checkout.isLoading,
                       onPressed: cart.items.isEmpty
                           ? null
-                          : () => _handlePayment(context, total, user.id),
+                          : () => _handlePayment(
+                              context,
+                              total,
+                              user.id,
+                              user.nombre,
+                              user.email,
+                            ),
                     ),
                   ],
                 ),
@@ -116,11 +123,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     BuildContext context,
     double total,
     String userId,
+    String userName,
+    String userEmail,
   ) async {
     if (!_formKey.currentState!.validate()) return;
 
     final address = _addressController.text.trim();
-    final success = await context.read<CheckoutViewModel>().processPayment(
+    final checkoutViewModel = context.read<CheckoutViewModel>();
+    final success = await checkoutViewModel.processPayment(
       amount: total,
       currency: 'usd',
       userId: userId,
@@ -133,6 +143,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (!context.mounted) return;
     if (success) {
       await context.read<CartViewModel>().loadCart(userId);
+      if (!context.mounted) return;
+
+      final order = checkoutViewModel.lastCompletedOrder;
+      var emailSent = false;
+      String? emailError;
+      if (order != null) {
+        final purchaseViewModel = context.read<PurchaseViewModel>();
+        emailSent = await purchaseViewModel.sendPurchaseConfirmation(
+          userName: userName,
+          recipientEmail: userEmail,
+          order: order,
+        );
+        emailError = purchaseViewModel.emailError;
+      }
       if (!context.mounted) return;
 
       await showDialog<void>(
@@ -150,6 +174,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               onPressed: () {
                 Navigator.pop(ctx);
                 context.goNamed(AppRouter.home);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      emailSent
+                          ? 'Se envio un correo con la factura de tu compra.'
+                          : 'Compra realizada. No se pudo enviar el correo: ${emailError ?? 'revisa la configuracion de SendGrid.'}',
+                    ),
+                    backgroundColor: emailSent
+                        ? AppTheme.successColor
+                        : AppTheme.errorColor,
+                  ),
+                );
               },
               child: const Text('Entendido'),
             ),

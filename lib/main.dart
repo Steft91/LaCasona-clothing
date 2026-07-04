@@ -6,13 +6,16 @@ import 'package:provider/provider.dart';
 
 import 'data/repositories/auth_repository_impl.dart';
 import 'data/repositories/cart_repository_impl.dart';
+import 'data/repositories/email_repository_impl.dart';
 import 'data/repositories/favorites_repository_impl.dart';
 import 'data/repositories/order_repository_impl.dart';
 import 'data/repositories/product_repository_impl.dart';
+import 'data/services/send_service.dart';
 import 'data/services/seed_data_service.dart';
 import 'data/services/visual_search_service.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/repositories/cart_repository.dart';
+import 'domain/repositories/email_repository.dart';
 import 'domain/repositories/favorites_repository.dart';
 import 'domain/repositories/order_repository.dart';
 import 'domain/repositories/product_repository.dart';
@@ -25,9 +28,11 @@ import 'presentation/viewmodels/chatbot_viewmodel.dart';
 import 'presentation/viewmodels/favorites_viewmodel.dart';
 import 'presentation/viewmodels/orders_viewmodel.dart';
 import 'presentation/viewmodels/product_viewmodel.dart';
+import 'presentation/viewmodels/purchase_viewmodel.dart';
 import 'presentation/viewmodels/visual_search_viewmodel.dart';
 import 'package:flutter_stripe/flutter_stripe.dart'; // <--- NUEVO
 import 'presentation/viewmodels/checkout_viewmodel.dart'; // <--- NUEVO
+import 'domain/use_cases/email_use_case.dart';
 import 'domain/use_cases/payment_use_cases.dart'; // <--- NUEVO
 import 'data/repositories/payment_repository_impl.dart'; // <--- NUEVO
 import 'data/services/stripe_service.dart'; // <--- NUEVO
@@ -84,6 +89,18 @@ class LaCasonaApp extends StatelessWidget {
         Provider<FavoritesRepository>(create: (_) => FavoritesRepositoryImpl()),
         Provider<VisualSearchService>(create: (_) => VisualSearchService()),
         Provider<StripeService>(create: (_) => StripeService()),
+        Provider<SendService>(
+          create: (_) => SendService(
+            apiKey: dotenv.env['SENDGRID_API_KEY'] ?? '',
+            fromEmail: dotenv.env['SENDGRID_FROM_EMAIL'] ?? '',
+            fromName: dotenv.env['SENDGRID_FROM_NAME'] ?? AppConstants.appName,
+          ),
+        ),
+        Provider<EmailRepository>(
+          create: (context) => EmailRepositoryImpl(
+            sendService: context.read<SendService>(),
+          ),
+        ),
         Provider<PaymentRepositoryImpl>(
           create: (context) => PaymentRepositoryImpl(
             stripeService: context.read<StripeService>(),
@@ -101,6 +118,11 @@ class LaCasonaApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AuthViewModel(context.read<AuthRepository>()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PurchaseViewModel(
+            EmailUseCase(context.read<EmailRepository>()),
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) =>

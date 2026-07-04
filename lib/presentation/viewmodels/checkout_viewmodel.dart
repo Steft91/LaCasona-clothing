@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
+import '../../domain/entities/order_entity.dart';
 import '../../domain/use_cases/payment_use_cases.dart';
 
 class CheckoutViewModel extends ChangeNotifier {
@@ -18,14 +19,18 @@ class CheckoutViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  OrderEntity? _lastCompletedOrder;
+  OrderEntity? get lastCompletedOrder => _lastCompletedOrder;
+
   Future<bool> processPayment({
     required double amount,
     required String currency,
     required String userId,
-    required Future<String?> Function() createOrder,
+    required Future<OrderEntity?> Function() createOrder,
   }) async {
     _isLoading = true;
     _error = null;
+    _lastCompletedOrder = null;
     notifyListeners();
 
     try {
@@ -44,15 +49,16 @@ class CheckoutViewModel extends ChangeNotifier {
 
       await Stripe.instance.presentPaymentSheet();
 
-      final orderId = await createOrder();
-      if (orderId == null) {
+      final order = await createOrder();
+      if (order == null) {
         throw Exception('No se pudo crear la orden despues del pago.');
       }
+      _lastCompletedOrder = order;
 
       await savePaymentRecordUseCase(
         userId: userId,
         payment: payment,
-        orderId: orderId,
+        orderId: order.id,
       );
 
       _isLoading = false;

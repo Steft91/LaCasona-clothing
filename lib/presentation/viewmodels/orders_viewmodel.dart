@@ -20,11 +20,11 @@ class OrdersViewModel extends ChangeNotifier {
     });
   }
 
-  Future<String?> confirmOrder({
+  Future<OrderEntity?> confirmOrder({
     required String userId,
     required String direccionEntrega,
   }) async {
-    String? orderId;
+    OrderEntity? createdOrder;
     await _guard(() async {
       final cartItems = await _cartRepository.getCartItems(userId);
       if (cartItems.isEmpty) {
@@ -54,11 +54,20 @@ class OrdersViewModel extends ChangeNotifier {
         direccionEntrega: direccionEntrega.trim(),
       );
 
-      orderId = await _orderRepository.createOrder(order);
+      final orderId = await _orderRepository.createOrder(order);
+      createdOrder = OrderEntity(
+        id: orderId,
+        usuarioId: order.usuarioId,
+        items: order.items,
+        total: order.total,
+        estado: order.estado,
+        fechaCreacion: order.fechaCreacion,
+        direccionEntrega: order.direccionEntrega,
+      );
       await _cartRepository.clearCart(userId);
       orders = await _orderRepository.getOrders(userId);
     });
-    return orderId;
+    return createdOrder;
   }
 
   Future<void> _guard(Future<void> Function() action) async {
