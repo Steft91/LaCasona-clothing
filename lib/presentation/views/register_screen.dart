@@ -64,14 +64,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CasonaTextField(
                     controller: _passwordController,
                     obscureText: true,
-                    labelText: 'Contrasena',
+                    labelText: 'Contraseña',
                     prefixIcon: Icons.lock_outline,
                   ),
                   const SizedBox(height: 16),
                   CasonaTextField(
                     controller: _confirmPasswordController,
                     obscureText: true,
-                    labelText: 'Confirmar contrasena',
+                    labelText: 'Confirmar contraseña',
                     prefixIcon: Icons.lock_reset,
                   ),
                 ],

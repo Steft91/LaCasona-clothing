@@ -27,102 +27,84 @@ class CasonaListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
-            gradient: AppTheme.woodGradient,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppTheme.lineGold),
+            color: AppTheme.softBlack,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppTheme.hairline),
             boxShadow: const [
               BoxShadow(
                 color: AppTheme.warmShadow,
-                offset: Offset(0, 7),
-                blurRadius: 13,
+                offset: Offset(0, 12),
+                blurRadius: 24,
               ),
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: AppTheme.parchmentGradient,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppTheme.burnishedGold),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (leading != null) ...[
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: AppTheme.goldGradient,
-                          borderRadius: BorderRadius.circular(9),
-                          border: Border.all(color: AppTheme.burnishedGold),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: IconTheme(
-                            data: const IconThemeData(
-                              color: AppTheme.deepWood,
-                              size: 20,
-                            ),
-                            child: leading!,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: AppTheme.inkBrown,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                          ),
-                          if (subtitle != null) ...[
-                            const SizedBox(height: 3),
-                            Text(
-                              subtitle!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: AppTheme.carvedWood,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.2,
-                                  ),
-                            ),
-                          ],
-                        ],
-                      ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (leading != null) ...[
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: AppTheme.caramel.withValues(alpha: 0.18),
+                      borderRadius: BorderRadius.circular(14),
                     ),
-                    if (trailing != null) ...[
-                      const SizedBox(width: 8),
-                      IconTheme(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: IconTheme(
                         data: const IconThemeData(
-                          color: AppTheme.mahogany,
+                          color: AppTheme.caramelLight,
                           size: 20,
                         ),
-                        child: trailing!,
+                        child: leading!,
                       ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                ],
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: AppTheme.cream,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppTheme.taupe,
+                                fontWeight: FontWeight.w500,
+                                height: 1.25,
+                              ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
+                if (trailing != null) ...[
+                  const SizedBox(width: 8),
+                  IconTheme(
+                    data: const IconThemeData(
+                      color: AppTheme.caramelLight,
+                      size: 20,
+                    ),
+                    child: trailing!,
+                  ),
+                ],
+              ],
             ),
           ),
         ),

@@ -70,17 +70,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   label: Text(
                     category,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: AppTheme.deepWood,
-                          fontWeight: FontWeight.w900,
-                        ),
+                      color: selected ? AppTheme.espressoBlack : AppTheme.oat,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                   selected: selected,
-                  selectedColor: AppTheme.softGold,
-                  backgroundColor: AppTheme.warmStone,
+                  selectedColor: AppTheme.caramelLight,
+                  backgroundColor: AppTheme.softBlack,
                   side: BorderSide(
-                    color: selected
-                        ? AppTheme.antiqueGold
-                        : AppTheme.dividerColor,
+                    color: selected ? AppTheme.caramelLight : AppTheme.hairline,
                   ),
                   onSelected: (_) => products.filterByCategory(category),
                 );

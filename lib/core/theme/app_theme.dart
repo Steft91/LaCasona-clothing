@@ -4,192 +4,186 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   AppTheme._();
 
-  static const Color colonialCream = Color(0xFFF7E8C8);
-  static const Color ivoryWall = Color(0xFFFFF4D7);
-  static const Color limewash = Color(0xFFE8D1A7);
-  static const Color warmStone = Color(0xFFD6A65F);
-  static const Color carvedWood = Color(0xFF6F351D);
-  static const Color deepWood = Color(0xFF1B0D08);
-  static const Color smokedCedar = Color(0xFF2B130B);
-  static const Color walnut = Color(0xFF3D1C0F);
-  static const Color mahogany = Color(0xFF7F2E18);
-  static const Color terracotta = Color(0xFFC85F2D);
-  static const Color mutedTerracotta = Color(0xFFE18A52);
-  static const Color antiqueGold = Color(0xFFD9A52D);
-  static const Color softGold = Color(0xFFFFD36D);
-  static const Color burnishedGold = Color(0xFF8D5E18);
-  static const Color gardenGreen = Color(0xFF325B38);
-  static const Color floralGreen = Color(0xFF74A05B);
-  static const Color roseClay = Color(0xFFC45148);
-  static const Color inkBrown = Color(0xFF24120B);
-  static const Color mutedText = Color(0xFF8D7460);
-  static const Color lightText = Color(0xFFFFF2D0);
-  static const Color warmShadow = Color(0x80200B05);
-  static const Color heavyShadow = Color(0xB8120704);
-  static const Color lineGold = Color(0xFFE0B64F);
-  static const Color errorColor = Color(0xFFB33F32);
-  static const Color successColor = Color(0xFF4F8A4F);
+  static const Color espressoBlack = Color(0xFF101010);
+  static const Color charcoal = Color(0xFF151515);
+  static const Color softBlack = Color(0xFF1D1D1D);
+  static const Color elevatedBlack = Color(0xFF25221F);
+  static const Color cocoa = Color(0xFF3A2A22);
+  static const Color caramel = Color(0xFFC9784A);
+  static const Color caramelLight = Color(0xFFE49A65);
+  static const Color cream = Color(0xFFF4E8D8);
+  static const Color oat = Color(0xFFCDBEAF);
+  static const Color taupe = Color(0xFF8F8178);
+  static const Color hairline = Color(0xFF2F2A27);
+  static const Color successColor = Color(0xFF78A66A);
+  static const Color errorColor = Color(0xFFD8675A);
+  static const Color warmShadow = Color(0x99000000);
+  static const Color heavyShadow = Color(0xCC000000);
 
-  static const Color primaryWhite = colonialCream;
-  static const Color accentBeige = warmStone;
-  static const Color darkText = inkBrown;
-  static const Color surfaceWhite = ivoryWall;
-  static const Color cardColor = ivoryWall;
-  static const Color dividerColor = Color(0xFFB98235);
-  static const Color accentGold = antiqueGold;
+  // Backwards-compatible aliases used across the existing UI.
+  static const Color colonialCream = cream;
+  static const Color ivoryWall = softBlack;
+  static const Color limewash = elevatedBlack;
+  static const Color warmStone = caramel;
+  static const Color carvedWood = caramel;
+  static const Color deepWood = espressoBlack;
+  static const Color smokedCedar = charcoal;
+  static const Color walnut = softBlack;
+  static const Color mahogany = caramel;
+  static const Color terracotta = caramel;
+  static const Color mutedTerracotta = caramelLight;
+  static const Color antiqueGold = caramel;
+  static const Color softGold = caramelLight;
+  static const Color burnishedGold = cocoa;
+  static const Color gardenGreen = successColor;
+  static const Color floralGreen = successColor;
+  static const Color roseClay = errorColor;
+  static const Color inkBrown = cream;
+  static const Color mutedText = taupe;
+  static const Color lightText = cream;
+  static const Color lineGold = hairline;
+
+  static const Color primaryWhite = espressoBlack;
+  static const Color accentBeige = caramel;
+  static const Color darkText = cream;
+  static const Color surfaceWhite = softBlack;
+  static const Color cardColor = softBlack;
+  static const Color dividerColor = hairline;
+  static const Color accentGold = caramel;
   static const Color shadowColor = warmShadow;
 
   static const LinearGradient wallGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [
-      deepWood,
-      smokedCedar,
-      walnut,
-      mahogany,
-    ],
-    stops: [0, 0.38, 0.72, 1],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [espressoBlack, charcoal, espressoBlack],
   );
 
   static const LinearGradient woodGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [
-      Color(0xFF8B421F),
-      carvedWood,
-      walnut,
-      Color(0xFF9E4A23),
-    ],
+    colors: [softBlack, elevatedBlack],
   );
 
   static const LinearGradient goldGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [
-      softGold,
-      antiqueGold,
-      burnishedGold,
-    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [caramel, caramelLight],
   );
 
   static const LinearGradient parchmentGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [
-      ivoryWall,
-      colonialCream,
-      limewash,
-    ],
+    colors: [softBlack, elevatedBlack],
   );
 
   static TextTheme get _textTheme {
-    final heading = GoogleFonts.cormorantGaramondTextTheme();
+    final heading = GoogleFonts.playfairDisplayTextTheme();
     final body = GoogleFonts.latoTextTheme();
 
     return TextTheme(
       displayLarge: heading.displayLarge?.copyWith(
-        fontSize: 56,
+        fontSize: 52,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
         height: 1.02,
       ),
       displayMedium: heading.displayMedium?.copyWith(
-        fontSize: 44,
+        fontSize: 42,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
         height: 1.05,
       ),
       displaySmall: heading.displaySmall?.copyWith(
         fontSize: 34,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
       ),
       headlineLarge: heading.headlineLarge?.copyWith(
-        fontSize: 32,
+        fontSize: 31,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
       ),
       headlineMedium: heading.headlineMedium?.copyWith(
-        fontSize: 28,
+        fontSize: 27,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
       ),
       headlineSmall: heading.headlineSmall?.copyWith(
-        fontSize: 24,
-        fontWeight: FontWeight.w800,
-        color: lightText,
-      ),
-      titleLarge: heading.titleLarge?.copyWith(
         fontSize: 23,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
+      ),
+      titleLarge: heading.titleLarge?.copyWith(
+        fontSize: 22,
+        fontWeight: FontWeight.w800,
+        color: cream,
       ),
       titleMedium: body.titleMedium?.copyWith(
         fontSize: 16,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
       ),
       titleSmall: body.titleSmall?.copyWith(
         fontSize: 14,
         fontWeight: FontWeight.w800,
-        color: lightText,
+        color: cream,
       ),
       bodyLarge: body.bodyLarge?.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: lightText,
-        height: 1.45,
+        fontWeight: FontWeight.w500,
+        color: cream,
+        height: 1.42,
       ),
       bodyMedium: body.bodyMedium?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: colonialCream,
-        height: 1.45,
+        fontWeight: FontWeight.w500,
+        color: oat,
+        height: 1.42,
       ),
       bodySmall: body.bodySmall?.copyWith(
         fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: colonialCream,
+        fontWeight: FontWeight.w500,
+        color: taupe,
         height: 1.35,
       ),
       labelLarge: body.labelLarge?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w900,
-        color: lightText,
+        fontWeight: FontWeight.w800,
+        color: cream,
       ),
       labelMedium: body.labelMedium?.copyWith(
         fontSize: 12,
-        fontWeight: FontWeight.w900,
-        color: lightText,
+        fontWeight: FontWeight.w800,
+        color: cream,
       ),
       labelSmall: body.labelSmall?.copyWith(
         fontSize: 11,
-        fontWeight: FontWeight.w900,
-        color: lightText,
+        fontWeight: FontWeight.w800,
+        color: taupe,
       ),
     );
   }
 
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: antiqueGold,
-      onPrimary: deepWood,
-      primaryContainer: carvedWood,
-      onPrimaryContainer: lightText,
-      secondary: terracotta,
-      onSecondary: lightText,
-      secondaryContainer: softGold,
-      onSecondaryContainer: deepWood,
-      tertiary: floralGreen,
-      onTertiary: deepWood,
-      tertiaryContainer: gardenGreen,
-      onTertiaryContainer: lightText,
+      brightness: Brightness.dark,
+      primary: caramel,
+      onPrimary: espressoBlack,
+      primaryContainer: cocoa,
+      onPrimaryContainer: cream,
+      secondary: caramelLight,
+      onSecondary: espressoBlack,
+      secondaryContainer: elevatedBlack,
+      onSecondaryContainer: cream,
+      tertiary: successColor,
+      onTertiary: espressoBlack,
+      tertiaryContainer: elevatedBlack,
+      onTertiaryContainer: cream,
       error: errorColor,
-      onError: lightText,
-      surface: ivoryWall,
-      onSurface: inkBrown,
-      outline: lineGold,
+      onError: cream,
+      surface: softBlack,
+      onSurface: cream,
+      outline: hairline,
       shadow: heavyShadow,
     );
 
@@ -197,249 +191,246 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: Colors.transparent,
       textTheme: textTheme,
       fontFamily: GoogleFonts.lato().fontFamily,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      splashColor: caramel.withValues(alpha: 0.12),
+      highlightColor: caramel.withValues(alpha: 0.08),
 
       appBarTheme: AppBarTheme(
-        backgroundColor: deepWood,
-        foregroundColor: lightText,
+        backgroundColor: espressoBlack,
+        foregroundColor: cream,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
         surfaceTintColor: Colors.transparent,
-        titleTextStyle: GoogleFonts.cormorantGaramond(
+        titleTextStyle: GoogleFonts.playfairDisplay(
           fontSize: 25,
           fontWeight: FontWeight.w800,
-          color: lightText,
+          color: cream,
         ),
-        iconTheme: const IconThemeData(color: softGold),
+        iconTheme: const IconThemeData(color: cream),
       ),
 
       cardTheme: CardThemeData(
-        color: ivoryWall,
-        elevation: 8,
-        shadowColor: heavyShadow,
+        color: softBlack,
+        elevation: 0,
+        shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: lineGold, width: 1.4),
+          borderRadius: BorderRadius.circular(22),
+          side: const BorderSide(color: hairline),
         ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return walnut.withValues(alpha: 0.55);
-            }
-            if (states.contains(WidgetState.pressed)) return mahogany;
-            return carvedWood;
-          }),
-          foregroundColor: const WidgetStatePropertyAll(lightText),
-          overlayColor: WidgetStatePropertyAll(softGold.withValues(alpha: 0.22)),
-          elevation: const WidgetStatePropertyAll(8),
-          shadowColor: const WidgetStatePropertyAll(heavyShadow),
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: caramel,
+          foregroundColor: espressoBlack,
+          disabledBackgroundColor: elevatedBlack,
+          disabledForegroundColor: taupe,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          minimumSize: const Size(48, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
           ),
-          minimumSize: const WidgetStatePropertyAll(Size(48, 52)),
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: const BorderSide(color: lineGold, width: 1.4),
-            ),
-          ),
-          textStyle: WidgetStatePropertyAll(
-            GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w900),
+          textStyle: GoogleFonts.lato(
+            fontSize: 14,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: softGold,
-          backgroundColor: walnut,
-          side: const BorderSide(color: lineGold, width: 1.4),
+          foregroundColor: cream,
+          backgroundColor: softBlack,
+          side: const BorderSide(color: hairline),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w900),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+          textStyle: GoogleFonts.lato(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: softGold,
-          textStyle: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w900),
+          foregroundColor: caramelLight,
+          textStyle: GoogleFonts.lato(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: ivoryWall,
+        fillColor: softBlack,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 16,
         ),
-        border: _inputBorder(lineGold, 1.4),
-        enabledBorder: _inputBorder(lineGold, 1.4),
-        focusedBorder: _inputBorder(softGold, 2),
-        errorBorder: _inputBorder(errorColor, 1.5),
-        focusedErrorBorder: _inputBorder(errorColor, 2),
+        border: _inputBorder(hairline, 1),
+        enabledBorder: _inputBorder(hairline, 1),
+        focusedBorder: _inputBorder(caramel, 1.5),
+        errorBorder: _inputBorder(errorColor, 1.2),
+        focusedErrorBorder: _inputBorder(errorColor, 1.5),
         labelStyle: GoogleFonts.lato(
-          color: carvedWood,
+          color: oat,
           fontSize: 14,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w700,
         ),
         hintStyle: GoogleFonts.lato(
-          color: mutedText,
+          color: taupe,
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
-        prefixIconColor: carvedWood,
-        suffixIconColor: carvedWood,
+        prefixIconColor: caramelLight,
+        suffixIconColor: caramelLight,
       ),
 
       chipTheme: ChipThemeData(
-        backgroundColor: warmStone,
-        selectedColor: antiqueGold,
-        disabledColor: walnut.withValues(alpha: 0.55),
-        side: const BorderSide(color: lineGold, width: 1.2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        labelStyle: textTheme.labelMedium?.copyWith(color: deepWood),
-        secondaryLabelStyle: textTheme.labelMedium?.copyWith(color: deepWood),
+        backgroundColor: softBlack,
+        selectedColor: caramel,
+        disabledColor: elevatedBlack,
+        side: const BorderSide(color: hairline),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        labelStyle: textTheme.labelMedium?.copyWith(color: oat),
+        secondaryLabelStyle: textTheme.labelMedium?.copyWith(
+          color: espressoBlack,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       ),
 
       listTileTheme: ListTileThemeData(
-        textColor: inkBrown,
-        iconColor: mahogany,
+        textColor: cream,
+        iconColor: caramelLight,
         titleTextStyle: GoogleFonts.lato(
-          color: inkBrown,
+          color: cream,
           fontSize: 16,
-          fontWeight: FontWeight.w900,
+          fontWeight: FontWeight.w800,
         ),
         subtitleTextStyle: GoogleFonts.lato(
-          color: carvedWood,
+          color: taupe,
           fontSize: 13,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
         ),
       ),
 
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return antiqueGold;
-          return ivoryWall;
+          if (states.contains(WidgetState.selected)) return caramel;
+          return softBlack;
         }),
-        checkColor: const WidgetStatePropertyAll(deepWood),
-        side: const BorderSide(color: lineGold, width: 1.4),
+        checkColor: const WidgetStatePropertyAll(espressoBlack),
+        side: const BorderSide(color: hairline, width: 1.2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
 
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return softGold;
-          return limewash;
+          if (states.contains(WidgetState.selected)) return caramel;
+          return oat;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return carvedWood;
-          return walnut;
+          if (states.contains(WidgetState.selected)) {
+            return caramel.withValues(alpha: 0.34);
+          }
+          return elevatedBlack;
         }),
-        trackOutlineColor: const WidgetStatePropertyAll(lineGold),
-      ),
-
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: deepWood,
-        selectedItemColor: softGold,
-        unselectedItemColor: colonialCream.withValues(alpha: 0.72),
-        type: BottomNavigationBarType.fixed,
-        elevation: 14,
-        selectedLabelStyle: GoogleFonts.lato(
-          fontSize: 11,
-          fontWeight: FontWeight.w900,
-        ),
-        unselectedLabelStyle: GoogleFonts.lato(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-        ),
+        trackOutlineColor: const WidgetStatePropertyAll(hairline),
       ),
 
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: deepWood,
-        indicatorColor: antiqueGold,
-        elevation: 14,
-        shadowColor: heavyShadow,
+        backgroundColor: espressoBlack,
+        indicatorColor: caramel.withValues(alpha: 0.18),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         height: 74,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return GoogleFonts.lato(
-            color: selected ? softGold : colonialCream.withValues(alpha: 0.74),
+            color: selected ? caramelLight : taupe,
             fontSize: 11,
-            fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+            fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           return IconThemeData(
-            color: states.contains(WidgetState.selected)
-                ? deepWood
-                : colonialCream.withValues(alpha: 0.78),
+            color: states.contains(WidgetState.selected) ? caramelLight : taupe,
           );
         }),
       ),
 
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: antiqueGold,
-        foregroundColor: deepWood,
-        elevation: 12,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: softGold, width: 1.4),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: espressoBlack,
+        selectedItemColor: caramelLight,
+        unselectedItemColor: taupe,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        selectedLabelStyle: GoogleFonts.lato(
+          fontSize: 11,
+          fontWeight: FontWeight.w800,
+        ),
+        unselectedLabelStyle: GoogleFonts.lato(
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
         ),
       ),
 
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: caramel,
+        foregroundColor: espressoBlack,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+
       dividerTheme: const DividerThemeData(
-        color: lineGold,
+        color: hairline,
         thickness: 1,
         space: 1,
       ),
-      iconTheme: const IconThemeData(color: softGold, size: 24),
+      iconTheme: const IconThemeData(color: caramelLight, size: 24),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: softGold,
-        linearTrackColor: walnut,
+        color: caramel,
+        linearTrackColor: elevatedBlack,
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: ivoryWall,
+        backgroundColor: softBlack,
         surfaceTintColor: Colors.transparent,
-        titleTextStyle: GoogleFonts.cormorantGaramond(
-          color: inkBrown,
+        titleTextStyle: GoogleFonts.playfairDisplay(
+          color: cream,
           fontSize: 24,
           fontWeight: FontWeight.w800,
         ),
         contentTextStyle: GoogleFonts.lato(
-          color: inkBrown,
+          color: oat,
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: lineGold, width: 1.4),
+          borderRadius: BorderRadius.circular(22),
+          side: const BorderSide(color: hairline),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: deepWood,
+        backgroundColor: elevatedBlack,
         contentTextStyle: GoogleFonts.lato(
-          color: lightText,
+          color: cream,
           fontSize: 14,
           fontWeight: FontWeight.w700,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: lineGold),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -447,7 +438,7 @@ class AppTheme {
 
   static OutlineInputBorder _inputBorder(Color color, double width) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(18),
       borderSide: BorderSide(color: color, width: width),
     );
   }

@@ -60,8 +60,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: message.isUser
-                          ? AppTheme.carvedWood
-                          : AppTheme.ivoryWall,
+                          ? AppTheme.caramel
+                          : AppTheme.softBlack,
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(16),
                         topRight: const Radius.circular(16),
@@ -80,11 +80,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     child: Text(
                       message.text,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: message.isUser
-                                ? AppTheme.lightText
-                                : AppTheme.inkBrown,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        color: message.isUser
+                            ? AppTheme.espressoBlack
+                            : AppTheme.cream,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 );
@@ -108,8 +108,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   const SizedBox(width: 8),
                   IconButton.filled(
                     style: IconButton.styleFrom(
-                      backgroundColor: AppTheme.carvedWood,
-                      foregroundColor: AppTheme.ivoryWall,
+                      backgroundColor: AppTheme.caramel,
+                      foregroundColor: AppTheme.espressoBlack,
                     ),
                     onPressed: chatbot.isLoading ? null : _send,
                     icon: const Icon(Icons.send),

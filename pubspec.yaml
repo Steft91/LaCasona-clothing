@@ -57,3 +57,4 @@ flutter:
 
   assets:
     - .env
+    - assets/brand/la_casona_logo.png

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
-import '../design_system/atoms/casona_button.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -33,13 +32,14 @@ class _SplashViewState extends State<SplashView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Center(
-                child: Container(
-                  width: 104,
-                  height: 104,
+                child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: AppTheme.softGold.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppTheme.lineGold, width: 1.4),
+                    color: AppTheme.cream,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: AppTheme.caramel.withValues(alpha: 0.4),
+                      width: 1.2,
+                    ),
                     boxShadow: const [
                       BoxShadow(
                         color: AppTheme.warmShadow,
@@ -48,10 +48,14 @@ class _SplashViewState extends State<SplashView> {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.storefront_rounded,
-                    size: 48,
-                    color: AppTheme.carvedWood,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      AppConstants.logoAsset,
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -68,20 +72,16 @@ class _SplashViewState extends State<SplashView> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 48),
-              CasonaButton(
-                text: 'Probar tema',
-                icon: Icons.check_circle_outline,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Todo funciona correctamente'),
-                    ),
-                  );
-                },
+              const Center(
+                child: SizedBox(
+                  width: 34,
+                  height: 34,
+                  child: CircularProgressIndicator(strokeWidth: 2.6),
+                ),
               ),
               const SizedBox(height: 16),
               Text(
-                'Firebase - Provider - go_router',
+                'Preparando tu experiencia',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall,
               ),

@@ -42,65 +42,53 @@ class CasonaTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: AppTheme.woodGradient,
-        borderRadius: BorderRadius.circular(14),
+        color: AppTheme.softBlack,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.hairline),
         boxShadow: const [
           BoxShadow(
             color: AppTheme.warmShadow,
-            offset: Offset(0, 5),
-            blurRadius: 12,
+            offset: Offset(0, 10),
+            blurRadius: 22,
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: AppTheme.parchmentGradient,
-            borderRadius: BorderRadius.circular(11),
-            border: Border.all(color: AppTheme.lineGold, width: 1.2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                offset: const Offset(0, -2),
-                blurRadius: 5,
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: controller,
-            obscureText: obscureText,
-            minLines: minLines,
-            maxLines: maxLines,
-            keyboardType: keyboardType,
-            textInputAction: textInputAction,
-            validator: validator,
-            onChanged: onChanged,
-            readOnly: readOnly,
-            onTap: onTap,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.inkBrown,
-                  fontWeight: FontWeight.w700,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        minLines: minLines,
+        maxLines: maxLines,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        validator: validator,
+        onChanged: onChanged,
+        readOnly: readOnly,
+        onTap: onTap,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppTheme.cream,
+          fontWeight: FontWeight.w600,
+        ),
+        decoration: InputDecoration(
+          filled: false,
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+          labelText: labelText,
+          hintText: hintText,
+          prefixIcon: prefixIcon == null
+              ? null
+              : Icon(prefixIcon, color: AppTheme.caramelLight),
+          suffixIcon: suffixIcon == null
+              ? null
+              : IconButton(
+                  onPressed: onSuffixTap,
+                  icon: Icon(suffixIcon, color: AppTheme.caramelLight),
                 ),
-            decoration: InputDecoration(
-              filled: false,
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              focusedErrorBorder: InputBorder.none,
-              labelText: labelText,
-              hintText: hintText,
-              prefixIcon: prefixIcon == null
-                  ? null
-                  : Icon(prefixIcon, color: AppTheme.mahogany),
-              suffixIcon: suffixIcon == null
-                  ? null
-                  : IconButton(
-                      onPressed: onSuffixTap,
-                      icon: Icon(suffixIcon, color: AppTheme.mahogany),
-                    ),
-            ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 16,
           ),
         ),
       ),

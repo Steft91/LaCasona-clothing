@@ -44,9 +44,9 @@ class CasonaButton extends StatelessWidget {
                   text,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: palette.text,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    color: palette.text,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ],
@@ -57,59 +57,32 @@ class CasonaButton extends StatelessWidget {
       height: compact ? 42 : 58,
       child: Opacity(
         opacity: enabled ? 1 : 0.56,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              top: compact ? 5 : 8,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: palette.shadow,
-                  borderRadius: BorderRadius.circular(9),
-                ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: enabled ? onPressed : null,
+            borderRadius: BorderRadius.circular(30),
+            child: Ink(
+              decoration: BoxDecoration(
+                gradient: palette.gradient,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: palette.border),
+                boxShadow: [
+                  BoxShadow(
+                    color: palette.shadow,
+                    offset: const Offset(0, 12),
+                    blurRadius: 26,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: compact
+                    ? const EdgeInsets.symmetric(horizontal: 16, vertical: 10)
+                    : const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+                child: Center(child: content),
               ),
             ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: enabled ? onPressed : null,
-                borderRadius: BorderRadius.circular(9),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: palette.gradient,
-                    borderRadius: BorderRadius.circular(9),
-                    border: Border.all(color: palette.border, width: 1.4),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.warmShadow,
-                        offset: Offset(0, compact ? 4 : 7),
-                        blurRadius: compact ? 9 : 13,
-                      ),
-                    ],
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.white.withValues(alpha: 0.2),
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.22),
-                        ],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: compact
-                          ? const EdgeInsets.fromLTRB(14, 9, 14, 12)
-                          : const EdgeInsets.fromLTRB(20, 15, 20, 19),
-                      child: Center(child: content),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -118,45 +91,37 @@ class CasonaButton extends StatelessWidget {
   _ButtonPalette get _palette {
     return switch (variant) {
       CasonaButtonVariant.primary => const _ButtonPalette(
-          gradient: AppTheme.woodGradient,
-          text: AppTheme.lightText,
-          border: AppTheme.lineGold,
-          shadow: AppTheme.deepWood,
-        ),
+        gradient: AppTheme.goldGradient,
+        text: AppTheme.espressoBlack,
+        border: AppTheme.caramel,
+        shadow: Color(0x553A1D0F),
+      ),
       CasonaButtonVariant.terracotta => const _ButtonPalette(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.mutedTerracotta,
-              AppTheme.terracotta,
-              AppTheme.mahogany,
-            ],
-          ),
-          text: AppTheme.lightText,
-          border: AppTheme.softGold,
-          shadow: AppTheme.deepWood,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppTheme.caramelLight, AppTheme.caramel],
         ),
+        text: AppTheme.espressoBlack,
+        border: AppTheme.caramelLight,
+        shadow: Color(0x553A1D0F),
+      ),
       CasonaButtonVariant.secondary => const _ButtonPalette(
-          gradient: AppTheme.goldGradient,
-          text: AppTheme.deepWood,
-          border: AppTheme.softGold,
-          shadow: AppTheme.burnishedGold,
-        ),
+        gradient: AppTheme.woodGradient,
+        text: AppTheme.cream,
+        border: AppTheme.hairline,
+        shadow: AppTheme.warmShadow,
+      ),
       CasonaButtonVariant.ghost => const _ButtonPalette(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.walnut,
-              AppTheme.smokedCedar,
-              AppTheme.deepWood,
-            ],
-          ),
-          text: AppTheme.softGold,
-          border: AppTheme.lineGold,
-          shadow: AppTheme.deepWood,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppTheme.softBlack, AppTheme.softBlack],
         ),
+        text: AppTheme.caramelLight,
+        border: AppTheme.hairline,
+        shadow: Colors.transparent,
+      ),
     };
   }
 }
@@ -193,9 +158,9 @@ class _ButtonLabel extends StatelessWidget {
       text,
       overflow: TextOverflow.ellipsis,
       style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: color,
-            fontWeight: FontWeight.w900,
-          ),
+        color: color,
+        fontWeight: FontWeight.w900,
+      ),
     );
   }
 }
@@ -210,10 +175,7 @@ class _LoadingIndicator extends StatelessWidget {
     return SizedBox(
       height: 20,
       width: 20,
-      child: CircularProgressIndicator(
-        strokeWidth: 2,
-        color: color,
-      ),
+      child: CircularProgressIndicator(strokeWidth: 2, color: color),
     );
   }
 }

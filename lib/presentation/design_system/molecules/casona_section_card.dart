@@ -22,144 +22,83 @@ class CasonaSectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: AppTheme.woodGradient,
-        borderRadius: BorderRadius.circular(20),
+        color: AppTheme.softBlack,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppTheme.hairline),
         boxShadow: const [
           BoxShadow(
             color: AppTheme.warmShadow,
-            offset: Offset(0, 8),
-            blurRadius: 16,
+            offset: Offset(0, 14),
+            blurRadius: 28,
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 7),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: AppTheme.parchmentGradient,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: AppTheme.lineGold, width: 1.3),
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Row(
-                  children: const [
-                    _CarvedColumn(),
-                    Spacer(),
-                    _CarvedColumn(),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: padding.add(const EdgeInsets.symmetric(horizontal: 10)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (title != null) ...[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (icon != null) ...[
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: AppTheme.goldGradient,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: AppTheme.burnishedGold,
-                                  width: 1.2,
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: AppTheme.warmShadow,
-                                    offset: Offset(0, 3),
-                                    blurRadius: 7,
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(9),
-                                child: Icon(
-                                  icon,
-                                  color: AppTheme.deepWood,
-                                  size: 19,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                          ],
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(color: AppTheme.inkBrown),
-                                ),
-                                if (subtitle != null) ...[
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    subtitle!,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: AppTheme.carvedWood,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ],
+        padding: padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (title != null) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (icon != null) ...[
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: AppTheme.caramel.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                      const SizedBox(height: 16),
-                    ],
-                    IconTheme(
-                      data: const IconThemeData(color: AppTheme.mahogany),
-                      child: DefaultTextStyle.merge(
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.inkBrown,
-                              fontWeight: FontWeight.w700,
-                            ),
-                        child: child,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Icon(
+                          icon,
+                          color: AppTheme.caramelLight,
+                          size: 20,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 12),
                   ],
-                ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title!,
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(color: AppTheme.cream),
+                        ),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle!,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppTheme.taupe,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 16),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CarvedColumn extends StatelessWidget {
-  const _CarvedColumn();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 7,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppTheme.deepWood,
-            AppTheme.mahogany,
-            AppTheme.softGold,
-            AppTheme.carvedWood,
+            IconTheme(
+              data: const IconThemeData(color: AppTheme.caramelLight),
+              child: DefaultTextStyle.merge(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.oat,
+                  fontWeight: FontWeight.w500,
+                ),
+                child: child,
+              ),
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
