@@ -43,8 +43,9 @@ class ProfileScreen extends StatelessWidget {
           CasonaListTile(
             leading: const Icon(Icons.straighten),
             title: 'Talla',
-            subtitle:
-                user?.talla.isNotEmpty == true ? user!.talla : 'No configurada',
+            subtitle: user?.talla.isNotEmpty == true
+                ? user!.talla
+                : 'No configurada',
           ),
           const SizedBox(height: 12),
           CasonaListTile(
@@ -72,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
               title: const Text('Acceso biometrico'),
               subtitle: Text(auth.biometricSummary),
               value: auth.isBiometricEnabled,
-              activeColor: AppTheme.carvedWood,
+              activeThumbColor: AppTheme.carvedWood,
               onChanged: auth.isLoading
                   ? null
                   : (enabled) {

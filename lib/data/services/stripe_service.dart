@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../../core/constants/app_constants.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
 class StripeService {
   static const String _baseUrl = 'https://api.stripe.com/v1';
 
@@ -14,7 +15,10 @@ class StripeService {
       // Stripe espera el monto en la unidad más pequeña (ej. centavos)
       final int amountInCents = (amount * 100).toInt();
 
-    final secretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+      final secretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+      if (secretKey.isEmpty) {
+        throw Exception('Falta STRIPE_SECRET_KEY en .env');
+      }
 
       final response = await http.post(
         Uri.parse('$_baseUrl/payment_intents'),
