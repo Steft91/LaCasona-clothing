@@ -3,16 +3,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../../domain/entities/chat_message_entity.dart';
+import '../../domain/entities/product_entity.dart';
+import '../../domain/repositories/product_repository.dart';
 
 class ChatbotViewModel extends ChangeNotifier {
-  ChatbotViewModel();
+  ChatbotViewModel(this._productRepository);
 
-  static const _systemPrompt =
-      'Eres Casona AI, asistente de moda de La Casona, una tienda de ropa con estética colonial quiteña. Ayuda al usuario a encontrar prendas, recomienda outfits y responde preguntas sobre los productos.';
+  final ProductRepository _productRepository;
 
   final List<ChatMessageEntity> messages = [
     ChatMessageEntity(
-      text: 'Hola, soy Casona AI. ¿Qué outfit quieres armar hoy?',
+      text: 'Hola, soy Casona AI. ¿Buscas alguna prenda u outfit?',
       isUser: false,
       timestamp: DateTime.now(),
     ),
@@ -39,9 +40,9 @@ class ChatbotViewModel extends ChangeNotifier {
       }
 
       final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
-      final response = await model.generateContent([
-        Content.text('$_systemPrompt\n\nUsuario: $trimmed'),
-      ]);
+      final inventory = await _productRepository.getAllProducts();
+      final prompt = _buildPrompt(trimmed, inventory);
+      final response = await model.generateContent([Content.text(prompt)]);
       messages.add(
         ChatMessageEntity(
           text: response.text ?? 'No pude responder en este momento.',
@@ -81,5 +82,34 @@ class ChatbotViewModel extends ChangeNotifier {
       return 'No hay conexión con Casona AI. Revisa tu internet.';
     }
     return 'No pude conectar con Casona AI. Intenta de nuevo.';
+  }
+
+  String _buildPrompt(String userMessage, List<ProductEntity> products) {
+    final availableProducts = products
+        .where((product) => product.stock > 0)
+        .take(40)
+        .map(_productLine)
+        .join('\n');
+
+    return '''
+Eres Casona AI, asistente de moda de La Casona.
+Responde en español, con tono amable, moderno y breve.
+No saludes de forma larga si el usuario solo dice hola.
+No inventes productos, categorías, materiales, colecciones, descuentos ni stock.
+Solo puedes recomendar prendas que aparezcan en el inventario disponible.
+Si el usuario pide algo que no existe en el inventario, dilo claramente y ofrece 1 o 2 alternativas reales.
+Si recomiendas outfits, arma combinaciones usando nombres exactos de productos reales.
+Máximo 4 líneas salvo que el usuario pida más detalle.
+
+Inventario disponible:
+$availableProducts
+
+Usuario: $userMessage
+Respuesta:
+''';
+  }
+
+  String _productLine(ProductEntity product) {
+    return '- ${product.nombre} | categoria: ${product.categoria} | precio: \$${product.precio.toStringAsFixed(2)} | tallas: ${product.tallas.join(', ')} | colores: ${product.colores.join(', ')} | stock: ${product.stock} | descripcion: ${product.descripcion}';
   }
 }

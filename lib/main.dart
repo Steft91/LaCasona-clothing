@@ -31,6 +31,7 @@ import 'presentation/viewmodels/checkout_viewmodel.dart'; // <--- NUEVO
 import 'domain/use_cases/payment_use_cases.dart'; // <--- NUEVO
 import 'data/repositories/payment_repository_impl.dart'; // <--- NUEVO
 import 'data/services/stripe_service.dart'; // <--- NUEVO
+
 /// La Casona — Fashion e-commerce with colonial Quito aesthetic.
 ///
 /// Entry point: loads environment variables, initialises Firebase,
@@ -44,7 +45,7 @@ void main() async {
 
   // Initialise Firebase
   await Firebase.initializeApp();
-  await SeedDataService().seedProductsIfEmpty();
+  await SeedDataService().seedMissingProducts();
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
   // Lock orientation to portrait
   await SystemChrome.setPreferredOrientations([
@@ -124,7 +125,10 @@ class LaCasonaApp extends StatelessWidget {
             context.read<ProductRepository>(),
           ),
         ),
-        ChangeNotifierProvider(create: (_) => ChatbotViewModel()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              ChatbotViewModel(context.read<ProductRepository>()),
+        ),
       ],
       child: MaterialApp.router(
         title: AppConstants.appName,

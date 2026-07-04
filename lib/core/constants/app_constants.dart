@@ -6,6 +6,7 @@ class AppConstants {
   static const String appName = 'La Casona';
   static const String appTagline = 'Moda con alma colonial';
   static const String packageName = 'com.lacasona.app';
+  static const String logoAsset = 'assets/brand/la_casona_logo.png';
 
   // Firestore Collections
   static const String usersCollection = 'usuarios';
@@ -20,8 +21,10 @@ class AppConstants {
   static const List<String> categories = [
     'Tops',
     'Vestidos',
-    'Outerwear',
     'Pantalones',
+    'Faldas',
+    'Outerwear',
+    'Conjuntos',
   ];
 
   static const List<String> clothingLabels = [
@@ -37,6 +40,7 @@ class AppConstants {
     'skirt',
     'sweater',
     'outerwear',
+    'shorts',
   ];
 
   // Pagination
@@ -49,13 +53,11 @@ class AppConstants {
   static const String currencySymbol = '\$';
   static const String currencyCode = 'USD';
 
-
-  
   // Stripe (Modo Test)
   // Nota: En un entorno real, la Secret Key NUNCA debe ir en la app.
   // La colocaremos aquí temporalmente para tu presentación académica.
-  static const String stripePublishableKey = 'pk_test_TU_CLAVE_PUBLICA_AQUI'; 
-  static const String stripeSecretKey = 'sk_test_TU_CLAVE_SECRETA_AQUI'; 
+  static const String stripePublishableKey = 'pk_test_TU_CLAVE_PUBLICA_AQUI';
+  static const String stripeSecretKey = 'sk_test_TU_CLAVE_SECRETA_AQUI';
 
   // Firestore Collections (Nueva)
   static const String paymentsCollection = 'pagos';
