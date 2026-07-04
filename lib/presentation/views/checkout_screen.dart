@@ -13,6 +13,7 @@ import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/cart_viewmodel.dart';
 import '../viewmodels/checkout_viewmodel.dart';
 import '../viewmodels/orders_viewmodel.dart';
+import '../widgets/login_required.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -40,66 +41,74 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Pago')),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(24),
-            children: [
-              CasonaSectionCard(
-                icon: Icons.lock_outline,
-                title: 'Finaliza tu compra',
-                subtitle: 'Confirma la direccion de entrega y realiza el pago.',
-                child: CasonaTextField(
-                  controller: _addressController,
-                  minLines: 2,
-                  maxLines: 3,
-                  textInputAction: TextInputAction.done,
-                  labelText: 'Direccion de entrega',
-                  hintText: 'Ej. Centro historico, Quito',
-                  prefixIcon: Icons.location_on_outlined,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Ingresa una direccion de entrega.';
-                    }
-                    return null;
-                  },
+      body: user == null
+          ? const LoginRequired(
+              icon: Icons.lock_outline,
+              title: 'Inicia sesión para pagar',
+              message:
+                  'Necesitamos tu cuenta para registrar el pedido y actualizar el stock.',
+            )
+          : SafeArea(
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.all(24),
+                  children: [
+                    CasonaSectionCard(
+                      icon: Icons.lock_outline,
+                      title: 'Finaliza tu compra',
+                      subtitle:
+                          'Confirma la direccion de entrega y realiza el pago.',
+                      child: CasonaTextField(
+                        controller: _addressController,
+                        minLines: 2,
+                        maxLines: 3,
+                        textInputAction: TextInputAction.done,
+                        labelText: 'Direccion de entrega',
+                        hintText: 'Ej. Centro historico, Quito',
+                        prefixIcon: Icons.location_on_outlined,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Ingresa una direccion de entrega.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    CasonaListTile(
+                      title: 'Total a pagar',
+                      subtitle: '${cart.items.length} producto(s)',
+                      trailing: Text(
+                        AppUtils.formatCurrency(total),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.carvedWood,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    if (checkout.error != null) ...[
+                      Text(
+                        checkout.error!,
+                        style: const TextStyle(color: AppTheme.errorColor),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    CasonaButton(
+                      text: 'Pagar de forma segura',
+                      icon: Icons.lock_outline,
+                      isLoading: checkout.isLoading,
+                      onPressed: cart.items.isEmpty
+                          ? null
+                          : () => _handlePayment(context, total, user.id),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              CasonaListTile(
-                title: 'Total a pagar',
-                subtitle: '${cart.items.length} producto(s)',
-                trailing: Text(
-                  AppUtils.formatCurrency(total),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.carvedWood,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              if (checkout.error != null) ...[
-                Text(
-                  checkout.error!,
-                  style: const TextStyle(color: AppTheme.errorColor),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-              ],
-              CasonaButton(
-                text: 'Pagar de forma segura',
-                icon: Icons.lock_outline,
-                isLoading: checkout.isLoading,
-                onPressed: user == null || cart.items.isEmpty
-                    ? null
-                    : () => _handlePayment(context, total, user.id),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routes/app_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/app_utils.dart';
 import '../../domain/entities/product_entity.dart';
@@ -53,17 +55,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(28),
                   child: AspectRatio(
                     aspectRatio: 1,
                     child: Image.network(
                       product.imagenUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: AppTheme.warmStone.withValues(alpha: 0.18),
+                        color: AppTheme.softBlack,
                         child: const Icon(
                           Icons.image_not_supported_outlined,
-                          color: AppTheme.carvedWood,
+                          color: AppTheme.caramelLight,
                         ),
                       ),
                     ),
@@ -83,7 +85,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Text(
                             AppUtils.formatCurrency(product.precio),
                             style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(color: AppTheme.carvedWood),
+                                ?.copyWith(color: AppTheme.caramelLight),
                           ),
                           const SizedBox(width: 12),
                           if (product.precioOriginal > product.precio)
@@ -151,7 +153,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<void> _add(ProductEntity product) async {
     final user = context.read<AuthViewModel>().user;
-    if (user == null) return;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Inicia sesión para agregar prendas al carrito.'),
+        ),
+      );
+      context.goNamed(AppRouter.login);
+      return;
+    }
 
     final cart = context.read<CartViewModel>();
     await cart.addProduct(
@@ -201,17 +211,19 @@ class _Selector extends StatelessWidget {
                 label: Text(
                   value,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: AppTheme.deepWood,
+                    color: value == selected
+                        ? AppTheme.espressoBlack
+                        : AppTheme.oat,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
                 selected: value == selected,
-                selectedColor: AppTheme.softGold,
-                backgroundColor: AppTheme.warmStone,
+                selectedColor: AppTheme.caramelLight,
+                backgroundColor: AppTheme.softBlack,
                 side: BorderSide(
                   color: value == selected
-                      ? AppTheme.antiqueGold
-                      : AppTheme.dividerColor,
+                      ? AppTheme.caramelLight
+                      : AppTheme.hairline,
                 ),
                 onSelected: (_) => onSelected(value),
               ),

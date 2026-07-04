@@ -51,16 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: AppTheme.softGold.withValues(alpha: 0.28),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppTheme.lineGold),
+                    color: AppTheme.cream,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: AppTheme.caramel.withValues(alpha: 0.38),
+                    ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Icon(
-                      Icons.storefront_rounded,
-                      size: 42,
-                      color: AppTheme.carvedWood,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: Image.asset(
+                      AppConstants.logoAsset,
+                      width: 110,
+                      height: 110,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -79,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 34),
               CasonaSectionCard(
-                title: 'Bienvenida',
+                title: 'Bienvenidx',
                 subtitle: 'Ingresa para continuar tu compra.',
                 child: Column(
                   children: [
@@ -93,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     CasonaTextField(
                       controller: _passwordController,
                       obscureText: true,
-                      labelText: 'Contrasena',
+                      labelText: 'Contraseña',
                       prefixIcon: Icons.lock_outline,
                     ),
                   ],
@@ -130,11 +133,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
-              const SizedBox(height: 16),
-              CasonaButton(
-                text: 'Crear cuenta',
-                variant: CasonaButtonVariant.ghost,
+              const SizedBox(height: 18),
+              TextButton(
                 onPressed: () => context.goNamed(AppRouter.register),
+                child: Text(
+                  'Crear cuenta',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppTheme.caramelLight,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              TextButton.icon(
+                onPressed: () => context.goNamed(AppRouter.home),
+                icon: const Icon(Icons.visibility_outlined, size: 17),
+                label: Text(
+                  'Entrar como invitadx',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppTheme.oat,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
             ],
           ),

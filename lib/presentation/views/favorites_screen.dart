@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/favorites_viewmodel.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/login_required.dart';
 import '../widgets/product_card.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -32,7 +33,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Favoritos')),
-      body: favorites.isLoading
+      body: userId == null
+          ? const LoginRequired(
+              icon: Icons.favorite_border,
+              title: 'Inicia sesión para guardar favoritos',
+              message:
+                  'Explora como invitadx y crea una cuenta para guardar tus prendas favoritas.',
+            )
+          : favorites.isLoading
           ? const Center(child: CircularProgressIndicator())
           : favorites.favorites.isEmpty
           ? const EmptyState(
@@ -54,9 +62,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 return ProductCard(
                   product: product,
                   isFavorite: true,
-                  onFavorite: userId == null
-                      ? null
-                      : () => favorites.toggle(userId, product),
+                  onFavorite: () => favorites.toggle(userId, product),
                 );
               },
             ),
