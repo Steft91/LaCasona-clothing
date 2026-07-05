@@ -6,26 +6,23 @@ import '../models/email_model.dart';
 
 class SendService {
   SendService({
-    required String apiKey,
-    required String fromEmail,
-    String fromName = 'La Casona',
+    required this.apiKey,
+    required this.fromEmail,
+    this.fromName = 'La Casona',
     http.Client? client,
-  }) : _apiKey = apiKey,
-       _fromEmail = fromEmail,
-       _fromName = fromName,
-       _client = client ?? http.Client();
+  }) : _client = client ?? http.Client();
 
   static final Uri _sendGridUri = Uri.parse(
     'https://api.sendgrid.com/v3/mail/send',
   );
 
-  final String _apiKey;
-  final String _fromEmail;
-  final String _fromName;
+  final String apiKey;
+  final String fromEmail;
+  final String fromName;
   final http.Client _client;
 
   Future<void> send(EmailModel email) async {
-    if (_apiKey.trim().isEmpty || _fromEmail.trim().isEmpty) {
+    if (apiKey.trim().isEmpty || fromEmail.trim().isEmpty) {
       throw Exception('Configura SENDGRID_API_KEY y SENDGRID_FROM_EMAIL.');
     }
 
@@ -33,11 +30,11 @@ class SendService {
       final response = await _client.post(
         _sendGridUri,
         headers: {
-          'Authorization': 'Bearer $_apiKey',
+          'Authorization': 'Bearer $apiKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode(
-          email.toSendGridJson(fromEmail: _fromEmail, fromName: _fromName),
+          email.toSendGridJson(fromEmail: fromEmail, fromName: fromName),
         ),
       );
 
