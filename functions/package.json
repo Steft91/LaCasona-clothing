@@ -1,0 +1,24 @@
+{
+  "name": "la-casona-functions",
+  "description": "Firebase Functions backend for La Casona demo checkout and AI.",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@sendgrid/mail": "^8.1.5",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.4.0",
+    "stripe": "^18.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.30.1"
+  },
+  "private": true
+}

@@ -1,15 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 
+import '../../data/services/cloud_functions_service.dart';
 import '../../domain/entities/chat_message_entity.dart';
 import '../../domain/entities/product_entity.dart';
 import '../../domain/repositories/product_repository.dart';
 
 class ChatbotViewModel extends ChangeNotifier {
-  ChatbotViewModel(this._productRepository);
+  ChatbotViewModel(
+    this._productRepository, {
+    CloudFunctionsService? functionsService,
+  }) : _functionsService = functionsService ?? CloudFunctionsService();
 
   final ProductRepository _productRepository;
+  final CloudFunctionsService _functionsService;
 
   final List<ChatMessageEntity> messages = [
     ChatMessageEntity(
@@ -34,18 +37,14 @@ class ChatbotViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-      if (apiKey == null || apiKey.isEmpty) {
-        throw StateError('Falta GEMINI_API_KEY en .env');
-      }
-
-      final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
       final inventory = await _productRepository.getAllProducts();
-      final prompt = _buildPrompt(trimmed, inventory);
-      final response = await model.generateContent([Content.text(prompt)]);
+      final reply = await _functionsService.generateChatReply(
+        userMessage: trimmed,
+        inventory: _inventoryLines(inventory),
+      );
       messages.add(
         ChatMessageEntity(
-          text: response.text ?? 'No pude responder en este momento.',
+          text: reply,
           isUser: false,
           timestamp: DateTime.now(),
         ),
@@ -68,7 +67,7 @@ class ChatbotViewModel extends ChangeNotifier {
   String _friendlyError(Object exception) {
     final message = exception.toString();
     if (message.contains('GEMINI_API_KEY')) {
-      return 'Falta configurar la clave de Casona AI.';
+      return 'Falta configurar la clave de Casona AI en Firebase Functions.';
     }
     if (message.contains('API_KEY_INVALID') ||
         message.contains('PERMISSION_DENIED')) {
@@ -84,29 +83,12 @@ class ChatbotViewModel extends ChangeNotifier {
     return 'No pude conectar con Casona AI. Intenta de nuevo.';
   }
 
-  String _buildPrompt(String userMessage, List<ProductEntity> products) {
-    final availableProducts = products
+  List<String> _inventoryLines(List<ProductEntity> products) {
+    return products
         .where((product) => product.stock > 0)
         .take(40)
         .map(_productLine)
-        .join('\n');
-
-    return '''
-Eres Casona AI, asistente de moda de La Casona.
-Responde en español, con tono amable, moderno y breve.
-No saludes de forma larga si el usuario solo dice hola.
-No inventes productos, categorías, materiales, colecciones, descuentos ni stock.
-Solo puedes recomendar prendas que aparezcan en el inventario disponible.
-Si el usuario pide algo que no existe en el inventario, dilo claramente y ofrece 1 o 2 alternativas reales.
-Si recomiendas outfits, arma combinaciones usando nombres exactos de productos reales.
-Máximo 4 líneas salvo que el usuario pida más detalle.
-
-Inventario disponible:
-$availableProducts
-
-Usuario: $userMessage
-Respuesta:
-''';
+        .toList(growable: false);
   }
 
   String _productLine(ProductEntity product) {

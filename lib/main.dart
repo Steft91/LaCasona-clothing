@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'data/repositories/auth_repository_impl.dart';
@@ -10,6 +9,7 @@ import 'data/repositories/email_repository_impl.dart';
 import 'data/repositories/favorites_repository_impl.dart';
 import 'data/repositories/order_repository_impl.dart';
 import 'data/repositories/product_repository_impl.dart';
+import 'data/services/cloud_functions_service.dart';
 import 'data/services/send_service.dart';
 import 'data/services/seed_data_service.dart';
 import 'data/services/visual_search_service.dart';
@@ -30,12 +30,11 @@ import 'presentation/viewmodels/orders_viewmodel.dart';
 import 'presentation/viewmodels/product_viewmodel.dart';
 import 'presentation/viewmodels/purchase_viewmodel.dart';
 import 'presentation/viewmodels/visual_search_viewmodel.dart';
-import 'package:flutter_stripe/flutter_stripe.dart'; // <--- NUEVO
-import 'presentation/viewmodels/checkout_viewmodel.dart'; // <--- NUEVO
+import 'presentation/viewmodels/checkout_viewmodel.dart';
 import 'domain/use_cases/email_use_case.dart';
-import 'domain/use_cases/payment_use_cases.dart'; // <--- NUEVO
-import 'data/repositories/payment_repository_impl.dart'; // <--- NUEVO
-import 'data/services/stripe_service.dart'; // <--- NUEVO
+import 'domain/use_cases/payment_use_cases.dart';
+import 'data/repositories/payment_repository_impl.dart';
+import 'data/services/stripe_service.dart';
 
 /// La Casona — Fashion e-commerce with colonial Quito aesthetic.
 ///
@@ -45,13 +44,9 @@ import 'data/services/stripe_service.dart'; // <--- NUEVO
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables (.env)
-  await dotenv.load(fileName: '.env');
-
   // Initialise Firebase
   await Firebase.initializeApp();
   await SeedDataService().seedMissingProducts();
-  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
   // Lock orientation to portrait
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -88,18 +83,20 @@ class LaCasonaApp extends StatelessWidget {
         Provider<OrderRepository>(create: (_) => OrderRepositoryImpl()),
         Provider<FavoritesRepository>(create: (_) => FavoritesRepositoryImpl()),
         Provider<VisualSearchService>(create: (_) => VisualSearchService()),
-        Provider<StripeService>(create: (_) => StripeService()),
+        Provider<CloudFunctionsService>(create: (_) => CloudFunctionsService()),
+        Provider<StripeService>(
+          create: (context) => StripeService(
+            functionsService: context.read<CloudFunctionsService>(),
+          ),
+        ),
         Provider<SendService>(
-          create: (_) => SendService(
-            apiKey: dotenv.env['SENDGRID_API_KEY'] ?? '',
-            fromEmail: dotenv.env['SENDGRID_FROM_EMAIL'] ?? '',
-            fromName: dotenv.env['SENDGRID_FROM_NAME'] ?? AppConstants.appName,
+          create: (context) => SendService(
+            functionsService: context.read<CloudFunctionsService>(),
           ),
         ),
         Provider<EmailRepository>(
-          create: (context) => EmailRepositoryImpl(
-            sendService: context.read<SendService>(),
-          ),
+          create: (context) =>
+              EmailRepositoryImpl(sendService: context.read<SendService>()),
         ),
         Provider<PaymentRepositoryImpl>(
           create: (context) => PaymentRepositoryImpl(
@@ -120,9 +117,8 @@ class LaCasonaApp extends StatelessWidget {
           create: (context) => AuthViewModel(context.read<AuthRepository>()),
         ),
         ChangeNotifierProvider(
-          create: (context) => PurchaseViewModel(
-            EmailUseCase(context.read<EmailRepository>()),
-          ),
+          create: (context) =>
+              PurchaseViewModel(EmailUseCase(context.read<EmailRepository>())),
         ),
         ChangeNotifierProvider(
           create: (context) =>
@@ -148,8 +144,10 @@ class LaCasonaApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) =>
-              ChatbotViewModel(context.read<ProductRepository>()),
+          create: (context) => ChatbotViewModel(
+            context.read<ProductRepository>(),
+            functionsService: context.read<CloudFunctionsService>(),
+          ),
         ),
       ],
       child: MaterialApp.router(

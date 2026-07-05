@@ -31,21 +31,18 @@ dependencies:
 
   # ML & AI
   google_mlkit_image_labeling: ^0.14.0
-  google_generative_ai: ^0.4.6
 
   # Navigation
   go_router: ^14.8.1
 
-  # Environment
-  flutter_dotenv: ^5.2.1
+  # Backend
+  cloud_functions: ^5.5.0
 
   # Formatting
   intl: ^0.20.2
-  http: ^1.5.0
 
   # Typography
   google_fonts: ^6.2.1
-  flutter_stripe: ^13.0.0
 
 dev_dependencies:
   flutter_test:
@@ -56,5 +53,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
     - assets/brand/la_casona_logo.png

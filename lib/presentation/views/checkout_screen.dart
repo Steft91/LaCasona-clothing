@@ -57,9 +57,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   children: [
                     CasonaSectionCard(
                       icon: Icons.lock_outline,
-                      title: 'Finaliza tu compra',
+                      title: 'Confirma tu pedido demo',
                       subtitle:
-                          'Confirma la direccion de entrega y realiza el pago.',
+                          'No se realizara ningun cobro real. Registraremos el pedido para pruebas.',
                       child: CasonaTextField(
                         controller: _addressController,
                         minLines: 2,
@@ -99,7 +99,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(height: 16),
                     ],
                     CasonaButton(
-                      text: 'Pagar de forma segura',
+                      text: 'Confirmar pedido demo',
                       icon: Icons.lock_outline,
                       isLoading: checkout.isLoading,
                       onPressed: cart.items.isEmpty
@@ -167,8 +167,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Icons.check_circle_outline,
             color: AppTheme.successColor,
           ),
-          title: const Text('Pago exitoso'),
-          content: const Text('Tu pedido fue registrado correctamente.'),
+          title: const Text('Pedido confirmado'),
+          content: const Text('Tu pedido demo fue registrado correctamente.'),
           actions: [
             TextButton(
               onPressed: () {
