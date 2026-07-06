@@ -46,7 +46,7 @@ exports.createPaymentIntent = onCall(
         metadata: {
           userId: request.auth.uid,
           app: "La Casona",
-          mode: "educational-demo",
+          mode: "test",
         },
       });
 
@@ -58,7 +58,8 @@ exports.createPaymentIntent = onCall(
         client_secret: intent.client_secret,
       };
     } catch (error) {
-      throw new HttpsError("internal", "No se pudo iniciar el pago demo.");
+      console.error("Stripe PaymentIntent error", error);
+      throw new HttpsError("internal", "No se pudo iniciar el pago.");
     }
   },
 );
@@ -93,7 +94,17 @@ exports.sendPurchaseEmail = onCall(
 
       return {ok: true};
     } catch (error) {
-      throw new HttpsError("internal", "No se pudo enviar el correo.");
+      console.error("SendGrid email error", {
+        code: error.code,
+        message: error.message,
+        response: error.response?.body,
+        from: sendgridFromEmail.value(),
+        to: destinatario,
+      });
+      throw new HttpsError(
+        "failed-precondition",
+        "No se pudo enviar el correo de confirmacion.",
+      );
     }
   },
 );

@@ -57,9 +57,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   children: [
                     CasonaSectionCard(
                       icon: Icons.lock_outline,
-                      title: 'Confirma tu pedido demo',
+                      title: 'Finaliza tu compra',
                       subtitle:
-                          'No se realizara ningun cobro real. Registraremos el pedido para pruebas.',
+                          'Confirma la direccion de entrega y completa el pago seguro.',
                       child: CasonaTextField(
                         controller: _addressController,
                         minLines: 2,
@@ -99,7 +99,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(height: 16),
                     ],
                     CasonaButton(
-                      text: 'Confirmar pedido demo',
+                      text: 'Pagar de forma segura',
                       icon: Icons.lock_outline,
                       isLoading: checkout.isLoading,
                       onPressed: cart.items.isEmpty
@@ -167,8 +167,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Icons.check_circle_outline,
             color: AppTheme.successColor,
           ),
-          title: const Text('Pedido confirmado'),
-          content: const Text('Tu pedido demo fue registrado correctamente.'),
+          title: const Text('Pago exitoso'),
+          content: const Text('Tu pedido fue registrado correctamente.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -179,7 +179,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     content: Text(
                       emailSent
                           ? 'Se envio un correo con la factura de tu compra.'
-                          : 'Compra realizada. No se pudo enviar el correo: ${emailError ?? 'revisa la configuracion de SendGrid.'}',
+                          : emailError ??
+                                'Compra realizada. No se pudo enviar el correo.',
                     ),
                     backgroundColor: emailSent
                         ? AppTheme.successColor

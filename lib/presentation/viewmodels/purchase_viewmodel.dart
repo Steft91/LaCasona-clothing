@@ -27,17 +27,15 @@ class PurchaseViewModel extends ChangeNotifier {
       final email = EmailEntity(
         destinatario: recipientEmail,
         asunto: 'Resumen de compra - ${AppConstants.appName}',
-        contenido: _buildPurchaseSummaryHtml(
-          userName: userName,
-          order: order,
-        ),
+        contenido: _buildPurchaseSummaryHtml(userName: userName, order: order),
       );
       await _emailUseCase(email);
       isSendingEmail = false;
       notifyListeners();
       return true;
     } catch (exception) {
-      emailError = exception.toString().replaceFirst('Exception: ', '');
+      emailError =
+          'Compra realizada. No se pudo enviar el comprobante por correo.';
       isSendingEmail = false;
       notifyListeners();
       return false;

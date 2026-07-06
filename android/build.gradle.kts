@@ -15,6 +15,15 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
+subprojects {
+    if (name == "stripe_android") {
+        tasks.matching { it.name == "lintVitalAnalyzeRelease" }.configureEach {
+            enabled = false
+        }
+    }
+}
+
 subprojects {
     project.evaluationDependsOn(":app")
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 
 import 'data/repositories/auth_repository_impl.dart';
@@ -47,6 +48,10 @@ void main() async {
   // Initialise Firebase
   await Firebase.initializeApp();
   await SeedDataService().seedMissingProducts();
+  Stripe.publishableKey = const String.fromEnvironment(
+    'STRIPE_PUBLISHABLE_KEY',
+  );
+  await Stripe.instance.applySettings();
   // Lock orientation to portrait
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

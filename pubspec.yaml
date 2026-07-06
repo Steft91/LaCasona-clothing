@@ -43,6 +43,7 @@ dependencies:
 
   # Typography
   google_fonts: ^6.2.1
+  flutter_stripe: ^13.0.0
 
 dev_dependencies:
   flutter_test:

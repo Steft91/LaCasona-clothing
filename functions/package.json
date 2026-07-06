@@ -1,6 +1,6 @@
 {
   "name": "la-casona-functions",
-  "description": "Firebase Functions backend for La Casona demo checkout and AI.",
+  "description": "Firebase Functions backend for La Casona checkout and AI.",
   "main": "index.js",
   "engines": {
     "node": "20"

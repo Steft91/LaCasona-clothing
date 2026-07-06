@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import '../../domain/entities/order_entity.dart';
 import '../../domain/use_cases/payment_use_cases.dart';
@@ -38,6 +39,16 @@ class CheckoutViewModel extends ChangeNotifier {
         currency: currency,
       );
 
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: payment.clientSecret,
+          merchantDisplayName: 'La Casona',
+          style: ThemeMode.dark,
+        ),
+      );
+
+      await Stripe.instance.presentPaymentSheet();
+
       final order = await createOrder();
       if (order == null) {
         throw Exception('No se pudo crear la orden despues del pago.');
@@ -53,12 +64,22 @@ class CheckoutViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       return true;
+    } on StripeException catch (exception) {
+      _error = _stripeError(exception);
     } catch (e) {
-      _error = 'Ocurrio un error al confirmar el pedido demo.';
+      _error = 'Ocurrio un error al procesar el pago.';
     }
 
     _isLoading = false;
     notifyListeners();
     return false;
+  }
+
+  String _stripeError(StripeException exception) {
+    final localized = exception.error.localizedMessage;
+    if (localized != null && localized.trim().isNotEmpty) {
+      return localized;
+    }
+    return 'Pago cancelado o no completado.';
   }
 }
